@@ -29,6 +29,7 @@ function Seo({ description, title, children }) {
 
   return (
     <>
+      {/* <meta charset="utf-8" /> */}
       <title>{defaultTitle ? `${title} | ${defaultTitle}` : title}</title>
       <meta name="description" content={metaDescription} />
       <meta property="og:title" content={title} />
@@ -38,6 +39,7 @@ function Seo({ description, title, children }) {
       <meta name="twitter:creator" content={site.siteMetadata?.author || ``} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={metaDescription} />
+      
       {children}
     </>
   )

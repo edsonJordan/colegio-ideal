@@ -1,129 +1,126 @@
 import * as React from "react"
-import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 
-import Layout from "../components/layout"
 import Seo from "../components/seo"
-import * as styles from "../components/index.module.css"
 
-const links = [
-  {
-    text: "Tutorial",
-    url: "https://www.gatsbyjs.com/docs/tutorial",
-    description:
-      "A great place to get started if you're new to web development. Designed to guide you through setting up your first Gatsby site.",
-  },
-  {
-    text: "Examples",
-    url: "https://github.com/gatsbyjs/gatsby/tree/master/examples",
-    description:
-      "A collection of websites ranging from very basic to complex/complete that illustrate how to accomplish specific tasks within your Gatsby sites.",
-  },
-  {
-    text: "Plugin Library",
-    url: "https://www.gatsbyjs.com/plugins",
-    description:
-      "Learn how to add functionality and customize your Gatsby site or app with thousands of plugins built by our amazing developer community.",
-  },
-  {
-    text: "Build and Host",
-    url: "https://www.gatsbyjs.com/cloud",
-    description:
-      "Now you’re ready to show the world! Give your Gatsby site superpowers: Build and host on Gatsby Cloud. Get started for free!",
-  },
-]
+import GlobalContextProvider from "../context/GlobalContextProvider"
+import {FindSchool} from "../components/sections"
 
-const samplePageLinks = [
-  {
-    text: "Page 2",
-    url: "page-2",
-    badge: false,
-    description:
-      "A simple example of linking to another page within a Gatsby site",
-  },
-  { text: "TypeScript", url: "using-typescript" },
-  { text: "Server Side Rendering", url: "using-ssr" },
-  { text: "Deferred Static Generation", url: "using-dsg" },
-]
+/* Carousel */
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
-const moreLinks = [
-  { text: "Join us on Discord", url: "https://gatsby.dev/discord" },
-  {
-    text: "Documentation",
-    url: "https://gatsbyjs.com/docs/",
-  },
-  {
-    text: "Starters",
-    url: "https://gatsbyjs.com/starters/",
-  },
-  {
-    text: "Showcase",
-    url: "https://gatsbyjs.com/showcase/",
-  },
-  {
-    text: "Contributing",
-    url: "https://www.gatsbyjs.com/contributing/",
-  },
-  { text: "Issues", url: "https://github.com/gatsbyjs/gatsby/issues" },
-]
+import {Header, Footer} from "../components"
 
-const utmParameters = `?utm_source=starter&utm_medium=start-page&utm_campaign=default-starter`
+// const utmParameters = `?utm_source=starter&utm_medium=start-page&utm_campaign=default-starter`
 
-const IndexPage = () => (
-  <Layout>
-    <Seo title="Home" />
-    <div className={styles.textCenter}>
-      <StaticImage
-        src="../images/example.png"
-        loading="eager"
-        width={64}
-        quality={95}
-        formats={["auto", "webp", "avif"]}
-        alt=""
-        style={{ marginBottom: `var(--space-3)` }}
-      />
-      <h1>
-        Welcome to <b>Gatsby!</b>
-      </h1>
-      <p className={styles.intro}>
-        <b>Example pages:</b>{" "}
-        {samplePageLinks.map((link, i) => (
-          <React.Fragment key={link.url}>
-            <Link to={link.url}>{link.text}</Link>
-            {i !== samplePageLinks.length - 1 && <> · </>}
-          </React.Fragment>
-        ))}
-        <br />
-        Edit <code>src/pages/index.js</code> to update this page.
-      </p>
-    </div>
-    <ul className={styles.list}>
-      {links.map(link => (
-        <li key={link.url} className={styles.listItem}>
-          <a
-            className={styles.listItemLink}
-            href={`${link.url}${utmParameters}`}
-          >
-            {link.text} ↗
-          </a>
-          <p className={styles.listItemDescription}>{link.description}</p>
-        </li>
-      ))}
-    </ul>
-    {moreLinks.map((link, i) => (
-      <React.Fragment key={link.url}>
-        <a href={`${link.url}${utmParameters}`}>{link.text}</a>
-        {i !== moreLinks.length - 1 && <> · </>}
-      </React.Fragment>
-    ))}
-  </Layout>
-)
+const IndexPage = () => {
 
-/**
- * Head export to define metadata for the page
- *
- * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
- */
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 7
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1281 },
+      items: 5
+    },
+    tablet: {
+      breakpoint: { max: 1280, min: 421 },
+      items: 3
+    },
+    mobile: {
+      breakpoint: { max: 420, min: 0 },
+      items: 3
+    }
+  };
+
+  return (
+      <main className="main">       
+        <GlobalContextProvider>
+          <Header/>
+        </GlobalContextProvider>        
+          <FindSchool/>        
+        <section className="section section--testimonial">
+          <div className="content--block">
+              <StaticImage className="image--block" src="../static/images/image-martha.jpg" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
+              {/* <StaticImage className="image--block" src="https://picsum.photos/seed/picsum/360/222" alt="A dinosaur" placeholder="blurred" layout="fixed"/> */}
+              <div className="flex flex-col content__text " >                
+                <StaticImage className="image--quote" src="../static/svg/quote.svg" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
+                <h3 className="title--h6 section ">
+                  Martha Marcano
+                </h3>
+                <label className="text--primary">
+                  Contadora y madre
+                </label>
+                <p className="text--body" >
+                  Me ayudaron a conseguir rapidamente el colegio ideal para mis hijos. Estoy realmente feliz
+                </p>
+              </div>
+          </div>
+          <div className="content--block" >
+            <h2 className="title--h6 title-carousel section" >
+              Las mejores instituciones estan aquí
+            </h2>
+            <Carousel className="carousel" centerMode={true} responsive={responsive} >
+              <div className="flex flex-row item">
+              <StaticImage className="image--quote" src="../static/images/clients/image1.png" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
+                {/* <img className='img--clients'  src="https://picsum.photos/seed/picsum/209/105"></img>  */}
+              </div>
+              <div className="flex flex-row item">
+                {/* <img className='img--clients'  src="https://picsum.photos/seed/picsum/209/105"></img>  */}
+                <StaticImage className="image--quote" src="../static/images/clients/image2.png" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
+              </div>
+              <div className="flex flex-row item">
+                {/* <img className='img--clients'  src="https://picsum.photos/seed/picsum/209/105"></img>  */}
+                <StaticImage className="image--quote" src="../static/images/clients/image3.png" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
+              </div>
+              <div className="flex flex-row item">
+                {/* <img className='img--clients'  src="https://picsum.photos/seed/picsum/209/105"></img>  */}
+                <StaticImage className="image--quote" src="../static/images/clients/image4.png" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
+              </div>
+              <div className="flex flex-row item">
+                {/* <img className='img--clients'  src="https://picsum.photos/seed/picsum/209/105"></img>  */}
+                <StaticImage className="image--quote" src="../static/images/clients/image5.png" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
+              </div>
+              <div className="flex flex-row item">
+                {/* <img className='img--clients'  src="https://picsum.photos/seed/picsum/209/105"></img>  */}
+                <StaticImage className="image--quote" src="../static/images/clients/image1.png" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
+              </div>
+            </Carousel>
+          </div>
+          <div className="content--block-family">
+            <div className="content--block__content">
+              <StaticImage className="image--block" src="../static/images/image-family.jpg" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
+              {/* <StaticImage className="image--block" src="https://picsum.photos/seed/picsum/360/222" alt="A dinosaur" placeholder="blurred" layout="fixed"/> */}
+              <div className="content__text">
+              <h3 className="title--h6 title section">
+              Unete a la familia 
+              </h3>
+              <p className="text--body" >
+              Si eres miembro de algun instituto, padre de familia o alguien que simplemente conoce de algun instituto que considera deba de ser reconocido, agregalo a nuestro listado y deja que sea descubierto
+              </p>
+              <a className="btn btn--normal btn--primary" >
+                Comenzar
+              </a>
+              </div>
+            
+            </div>            
+          </div>        
+        </section>
+        <section className="section">
+          <div className="section__image--portada-two" >
+              <h2 className='title--h5'>Encontremos juntos el colegio que buscas</h2>
+              <a className="btn btn--normal btn--primary" >
+                  Buscar instituto
+              </a>
+          </div>
+        </section>
+        <Footer/>
+      </main>
+      )
+}
+
 export const Head = () => <Seo title="Home" />
-
 export default IndexPage
