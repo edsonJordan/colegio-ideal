@@ -75,13 +75,13 @@ export default function FindSchool({data}) {
         const dataStates = State.getStatesOfCountry('MX'); 
         const states = dataStates.map(({name})=> {return {field:"state" ,value:name, label:name}})
         setStates(allWpStateSchool.nodes.map((school)=> {return {field:"state" ,value:school.slug, label:school.name}}));  
-        inititalLocalStorage();
+        inititalParamsSearchLocalStorage();
         // console.log(allWpLevelsSchool);
     },[])
-    const inititalLocalStorage = () =>{
+    const inititalParamsSearchLocalStorage = () =>{
         const paramsLocalStorage = typeof window !== "undefined" && JSON.parse(localStorage.getItem('searchSchool'))
         paramsLocalStorage === null && localStorage.setItem('searchSchool', JSON.stringify({state:{value: "ciudad-de-mexico"},level:{value: "secundaria: Secundaria"},type:{value: "público: Público"}} ))
-        setParamsSearchSchool(paramsLocalStorage);
+        setParamsSearchSchool({state:{value: "ciudad-de-mexico"},level:{value: "secundaria: Secundaria"},type:{value: "público: Público"}});
     }
 
     const handleParamToSeach=(params)=>{
@@ -235,7 +235,7 @@ export default function FindSchool({data}) {
         </div>
         <div className='section__carousel ' >
         <GlobalContextProvider>
-            <SliderHorizontal title={"Populares"} />
+            <SliderHorizontal type={"ranking"} title={"Populares"} />
             {/* <SliderHorizontal title={"Cerca de tí"} /> */}
         </GlobalContextProvider>
         </div>

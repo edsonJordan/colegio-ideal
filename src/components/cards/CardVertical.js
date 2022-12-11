@@ -9,15 +9,15 @@ export default function CardVertical(props) {
     
     const [isFavorite, setIsFavorite]=useState(false)
     useEffect(()=>{
-        props.isFavorite != undefined && setIsFavorite(props.isFavorite);
-       
+        props.isFavorite != undefined  && setIsFavorite(props.isFavorite);   
+        // console.log(props.isFavorite);    
     },[])
   return (
     <div className='card' id={props.school.id_post} >
         <div className='card__header'>
             
             <img className='img--card'   src="https://picsum.photos/seed/picsum/360/104"></img> 
-            <div id='1' className='icon__heart' 
+            <div  className='icon__heart' 
                         onClick={
                             () =>{ props.setIdPost(props.school.id_post, !isFavorite); setIsFavorite(!isFavorite) } }
             >
@@ -43,9 +43,16 @@ export default function CardVertical(props) {
                 
             </h3>
             <div className='items' >
-                <label className='text--ext-sm text--secondary text-label'>
-                     {props.school.typeSchool}
-                </label>
+            {
+                props.school.typeSchool.map((element, index)=>{
+                    return (
+                        <label key={index} className='text--ext-sm text--secondary text-label'>
+                                {element}
+                        </label>
+                    )
+                })
+            }
+                
 
                 <p className='item__stars' >  
                     ({props.school.stars}) 
@@ -81,7 +88,7 @@ export default function CardVertical(props) {
         <div className='card__footer' >
             <ul className='list'>
                 <li>
-                    <a href={`/colegios/${props.school.slug}`} className='btn btn__ghost--primary btn--normal'>
+                    <a href={`/colegio/${props.school.slug}`} className='btn btn__ghost--primary btn--normal'>
                     Leer Más
                     </a>
                     {/* 

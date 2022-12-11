@@ -19,6 +19,9 @@ export default function FormComment(props) {
 
   /*  Form Components Comment*/
   const [opinionSchool, setOpinionSchool]= useState("")
+  const [levelsOptionsList, setLevelOptionsList]=useState(props.levels.nodes.map(element=>{return {field:element.name, value:element.name, label:element.name}}))
+
+//   { field:"level" , value: 'kínder: Kínder', label: 'Kínder' }
   const [typeSchool, setTypeSchool] = useState({value:null,error:false, message:""})
   const [clasificationSchool, setClasificactionSchool] = useState(3)
   const [calidezSchool, setCalidezSchool] = useState({icon:null,value:null,text:null, error:false, message:""})
@@ -34,7 +37,8 @@ export default function FormComment(props) {
   useEffect(()=>{
     // console.log(props.post);
     // console.log(stateAuth.data.username);
-    console.log(stateAuth.data.user_email);
+    // console.log(stateAuth.data.user_email);
+    // console.log();
   }, [])
   
   const seendComment =()=>{
@@ -52,56 +56,56 @@ export default function FormComment(props) {
 
   const handleSubmitComment=(e)=>{
     e.preventDefault()
-  if(typeSchool.value===null) setTypeSchool({...typeSchool,error:true,message:"Ingrese este campo"})
-  if(calidezSchool.value===null) setCalidezSchool({...calidezSchool,error:true,message:"Ingrese este campo"})
-  if(qualitySchool.value===null) setQualitySchool({...qualitySchool,error:true,message:"Ingrese este campo"})
-  if(priceSchool.value===null) setPriceSchool({...priceSchool,error:true,message:"Ingrese este campo"})
-  if(feelingSchool.value===null) setFeelingSchool({...feelingSchool,error:true,message:"Ingrese este campo"})
-  if(feelingChildren.value===null) setFeelingChildrenSchool({...feelingChildren,error:true,message:"Ingrese este campo"})
+    // console.log();
+  if(typeSchool.value ===null) setTypeSchool({...typeSchool,error:true,message:"Ingrese este campo"})
+  if(calidezSchool.value ===null) setCalidezSchool({...calidezSchool,error:true,message:"Ingrese este campo"})
+  if(qualitySchool.value ===null) setQualitySchool({...qualitySchool,error:true,message:"Ingrese este campo"})
+  if(priceSchool.value ===null) setPriceSchool({...priceSchool,error:true,message:"Ingrese este campo"})
+  if(feelingSchool.value ===null) setFeelingSchool({...feelingSchool,error:true,message:"Ingrese este campo"})
+  if(feelingChildren.value ===null) setFeelingChildrenSchool({...feelingChildren,error:true,message:"Ingrese este campo"})
 
-  if(typeSchool.value=== null || calidezSchool.value ===null || qualitySchool.value ===null || priceSchool.value ===null || feelingSchool.value ===null || feelingChildren.value ===null) return 
-
+  if(typeSchool.value === null || calidezSchool.value ===null || qualitySchool.value ===null || priceSchool.value ===null || feelingSchool.value ===null || feelingChildren.value ===null) return 
 
   const data = {
-    post: props.post,
-    author_name: stateAuth.data.username,
-    author_email: stateAuth.data.user_email,
-    content: opinionSchool,
+    "post": props.post,
+    "author_name": stateAuth.data.username,
+    "author_email": stateAuth.data.user_email,
+    "content": opinionSchool,
+    "meta":{
+        "stars":clasificationSchool,
+    },
+    /* "acf":{
+        "level":"hola mundo",
+        "humanWarmth":"💕Excelente",
+        "qualityEducative":"🤓Excelente",
+        "price":"💲Económico",
+        "feeling":"😎Muy bien",
+        "feelingChildren":"😄Bien"
+    } */
+    "acf":{
+        "level":typeSchool.value,
+        "humanWarmth":calidezSchool.value,
+        "qualityEducative":qualitySchool.value,
+        "price":priceSchool.value,
+        "feeling":feelingSchool.value,
+        "feelingChildren":feelingChildren.value
+    }
   };
-     return axios.post(`${process.env.WP_URL_REST}/wp/v2/comments`, 
+//   console.log(data);
+//   return
+
+    return axios.post(`${process.env.WP_URL_REST}/wp/v2/comments`, 
     JSON.stringify(data),{headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${stateAuth.data.token}` 
         }
-    }).then((response)=>{
-        console.log("Comentario agregado");
-    }).catch((error)=>{
-        console.log(error);
-    });   
-    
+        }).then((response)=>{
+            console.log("Comentario agregado");
+        }).catch((error)=>{
+            console.log(error);
+        });       
   }
  
-  
-
-  const optionsLevel = [
-    { field:"level" , value: 'kínder: Kínder', label: 'Kínder' },
-    { field:"level" , value: 'jardín de niños: Jardín de niños', label: 'Jardín de niños' },
-    { field:"level" , value: "licenciatura en educación pre-escolar / primaria: Licenciatura en educación pre-escolar / primaria", label: "Licenciatura en educación pre-escolar / primaria" },
-    { field:"level" , value: 'maternal: Maternal', label: 'Maternal' },
-    { field:"level" , value: 'pre-escolar: Pre-escolar', label: 'Pre-escolar' },
-    { field:"level" , value: 'primaria: Primaria', label: 'Primaria' },
-    { field:"level" , value: 'secundaria: Secundaria', label: 'Secundaria' },
-    { field:"level" , value: 'preparatoria: Preparatoria', label: 'Preparatoria' },
-    { field:"level" , value: 'preparatoria abierta: Preparatoria abierta', label: 'Preparatoria abierta' },
-    { field:"level" , value: 'bachillerato: Bachillerato', label: 'Bachillerato' },
-    { field:"level" , value: 'licenciatura: Licenciatura', label: 'Licenciatura' },
-    { field:"level" , value: 'postgrado: Postgrado', label: 'Postgrado' },
-    { field:"level" , value: 'carreras técnicas comerciales: Carreras técnicas comerciales', label: 'Carreras técnicas comerciales' },
-    { field:"level" , value: 'universidad: Universidad', label: 'Universidad' },
-    { field:"level" , value: 'lactantes: Lactantes', label: 'Lactantes' },
-    { field:"level" , value: 'guardería: Guardería', label: 'Guardería' },
-  ]
-  
 
   return (
     <div className="modal__comment">
@@ -123,7 +127,7 @@ export default function FormComment(props) {
                     </div>   
                     <div className="form__block">
                     <label className="form-block__title" htmlFor="name" >Tipo</label>
-                    <Select onChange={(component)=>{setTypeSchool({...typeSchool,value:component.value, error:false})}} className="create-select" options={optionsLevel} />
+                    <Select onChange={(component)=>{setTypeSchool({...typeSchool,value:component.value, error:false})}} className="create-select" options={levelsOptionsList} />
                     {typeSchool.error ? typeSchool.message:""}
                     </div>
                     <div className="form__block">         

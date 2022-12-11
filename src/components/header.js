@@ -51,7 +51,7 @@ const Header= ()=>{
                       <Link to="/colegios/favoritos">Favoritos</Link>
                   </li>
                   <li className="option">
-                      <a>Tus Colegios</a>
+                      <Link to="/colegios/mis-colegios">Tus colegios</Link>
                   </li>
                   <li className="option">
                       <Link to="/colegios/agregar" className="btn btn--ext-sm btn--primary">Agregar Colegio</Link>

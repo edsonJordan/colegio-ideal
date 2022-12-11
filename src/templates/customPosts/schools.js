@@ -16,7 +16,12 @@ export default function Post({pageContext}) {
   const {school} = pageContext;
   const {customFieldColegio}= school;
   const [commentActive, setCommentActiveModal] = useState(false);
+  const [commentsFromPost, setCommentsFromPost]=useState([]);
+  const [commentsPost, setCommentsPost]=useState([]);
 
+  const [countQualityEducative, setCountQualityEducative]=useState(40)
+  const[countPrice, setCountPrice]=useState(40)
+  const [countHumanWarmth, setCountHumanWarmth]=useState(40)
 
   /*  Form Components Comment*/
   const [opinionSchool, setOpinionSchool]= useState("")
@@ -28,9 +33,66 @@ export default function Post({pageContext}) {
   const [feelingSchool, setFeelingSchool] = useState({icon:null,value:null,text:null, error:false, message:""})
   const [feelingChildren, setFeelingChildrenSchool]= useState({icon:null,value:null,text:null, error:false, message:""})
 
+  const sortOldComments=(objectComments)=>{
+      return objectComments.sort((a,b)=>{
+        return  new Date(a.date) - new Date(b.date);
+      })
+  }
+  const sortNewComments=(objectComments)=>{
+    return objectComments.sort((a,b)=>{
+      return  new Date(b.date) - new Date(a.date) ;
+    })
+  }
+  const sortBetterComments=(objectComments)=>{
+    return objectComments.sort((a,b)=>{
+      return b.meta.stars - a.meta.stars ;
+    })
+  }
 
+
+  const handleFilterComments=({target})=>{
+    if(target.value==="newComments") return setCommentsFromPost(sortNewComments([...commentsPost]))
+    if(target.value==="oldComments") return setCommentsFromPost(sortOldComments([...commentsPost]))
+    if(target.value==="betterCommets") return setCommentsFromPost(sortBetterComments([...commentsPost]))
+    // setCommentsFromPost([...commentsPost])
+
+    {/* oldComments  newComments   betterCommets */}
+    
+  }
   const handleStateModal=(state)=>{
       if(!state) return setCommentActiveModal(false)
+  }
+
+
+  const getCommentsFromPost=()=>{
+      return fetch(`${process.env.WP_URL_REST}/wp/v2/comments?post=${school.databaseId}`)
+      .then(res=>res.json())
+      .then((data)=>{
+        setCommentsPost(data);
+        setCommentsFromPost(data)
+
+       
+        if(data.length == 0) return ;
+
+        let humanWarmth = 0
+        let qualityEducative = 0
+        let price = 0
+        
+        data.forEach(element => {
+          element.acf.humanWarmth === "💕Excelente" && humanWarmth++
+          element.acf.qualityEducative === "🤓Excelente" && qualityEducative++
+          element.acf.price === "💲Económico" && price++
+        });
+
+
+        // Math.trunc((countHumanWarmth*100)/commentsPost.length)
+        setCountHumanWarmth(Math.trunc((humanWarmth*100)/data.length))
+        setCountQualityEducative(Math.trunc((qualityEducative*100)/data.length))
+        setCountPrice(Math.trunc((price*100)/data.length))
+
+    }).catch((error)=>{
+        console.log(error);
+    });  
   }
 
   
@@ -42,29 +104,11 @@ export default function Post({pageContext}) {
   // console.log(school.databaseId);
 
   useEffect(()=>{
-    // console.log(school);
+    getCommentsFromPost()
   }, [])
+  useEffect(()=>{
+  },[commentsFromPost])
   
-  const seendComment =()=>{
-   /*  return axios.post(`${process.env.WP_URL_REST}/wp/v2/comments`, 
-    JSON.stringify(data),{headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${stateAuth.data.token}` 
-        }
-    }).then((response)=>{
-        console.log("Colegio agregado");
-    }).catch((error)=>{
-        console.log(error);
-    });    */
-  }
-  const eventModel =  (idPost)=>{
-   /*  if(isFavorite){
-      addPostFavorite(idPost, stateAuth.data.username)
-    }else{
-      deletePostFavorite(idPost,stateAuth.data.username)
-      // console.log(idPost,stateAuth.data.username);
-    } */
-  }
 
 
   return (
@@ -270,7 +314,7 @@ export default function Post({pageContext}) {
                               Calidez Humana
                             </p>
                             <div className='load-bar' >
-                                <div data-indice="95" className='load-bar__content'>
+                                <div style={{width:`${countHumanWarmth<36 ? 40 : countHumanWarmth}%`}} data-indice={countHumanWarmth<36 ? 40 : countHumanWarmth} className='load-bar__content'>
                                 💕Excelente
                                 </div>
                             </div>
@@ -280,17 +324,17 @@ export default function Post({pageContext}) {
                               Calidad educativa
                             </p>
                             <div  className='load-bar' >
-                                <div data-indice="95" className='load-bar__content'>
+                                <div style={{width:`${countQualityEducative<36 ? 40 : countQualityEducative}%`}} data-indice={countQualityEducative<36 ? 40 : countQualityEducative} className='load-bar__content'>
                                 🤓Excelente
                                 </div>
                             </div>
                           </div>
                           <div className='block--load-bar'>
                             <p className='title--load-bar' >
-                              Calidad educativa
+                              Precio
                             </p>
                             <div  className='load-bar' >
-                                <div data-indice="95" className='load-bar__content'>
+                                <div style={{width:`${countPrice<36 ? 40 : countPrice}%`}} data-indice={countPrice<36 ? 40 : countPrice} className='load-bar__content'>
                                 💸Ecónomico
                                 </div>
                             </div>
@@ -304,14 +348,14 @@ export default function Post({pageContext}) {
                     </p>                    
                     <div className='form--buttons-comments'>
                         <div className='container--select'>
-                          <select className='input--select' >
-                                <option>
+                          <select onChange={(event)=>{handleFilterComments(event)}} className='input--select' >
+                                <option value="newComments" >
                                   Mas recientes
                                 </option>
-                                <option>
-                                  Mas antiguos
+                                <option value="oldComments" >
+                                  Mas antiguos                                  
                                 </option>
-                                <option>
+                                <option value="betterCommets" >
                                   Mejores puntuaciones
                                 </option>
                           </select>
@@ -321,87 +365,118 @@ export default function Post({pageContext}) {
                 </div>
                 <div className='container__comment' >
                     <div className='content__coments'>
-                        <div className='card--comment'>
-                            <div className='card__header'>
-                              <StaticImage className='avatar--comment' src={"https://picsum.photos/seed/picsum/40/40"} alt="A dinosaur" placeholder="blurred" layout="fixed" />
-                            </div>
-                            <div className='card__body'>
-                                <div className='comment' >
-                                    <h3 className='title'>
-                                      Martha Marcano
-                                    </h3>
-                                    <div className='block--stars-with-date'>
-                                      <p className='paragraph-stars'>
-                                        ★★★★★
-                                      </p>
-                                      <p className='paragraph-date' >
-                                        21 sep, 2021
-                                      </p>
-                                    </div>
-                                    <span>
-                                      Una opción inmejorable, es un centro con gran personalidad.
-                                    </span>
+                      
+
+                        {
+                          commentsFromPost.length>0 ? commentsFromPost.map((element, index)=>{
+                            let date = new Date(element.date_gmt)
+                            const formatDate = {year: 'numeric', month: 'long', day: 'numeric' };
+                            
+                            return(
+                              <div key={index} className='card--comment'>
+                                <div className='card__header'>
+                                  {/* <StaticImage className='avatar--comment' src={"https://picsum.photos/seed/picsum/40/40"} alt="A dinosaur" placeholder="blurred" layout="fixed" /> */}
+                                  <img className='avatar--comment' src={element.author_avatar_urls['48']}/>                                  
                                 </div>
-                                <details>
-                                  <summary>Detalles</summary>
-                                  <div className='content__comment-details'>
-                                    <div className='block__details'>
-                                        <div className='content__details'>
-                                            <div className='detail'>
-                                              <p className='title--detail'>
-                                                Calidez humana
-                                              </p>
-                                              <div className='description'>
-                                                💕
-                                                <p>Excelente</p>
-                                              </div>
-                                            </div>
-                                            <div className='detail'>
-                                              <p className='title--detail'>
-                                                Calidad educativa
-                                              </p>
-                                              <div className='description'>
-                                                🤓
-                                                <p>Excelente</p>
-                                              </div>
-                                            </div>
-                                            <div className='detail'>
-                                              <p className='title--detail'>
-                                                Precio
-                                              </p>
-                                              <div className='description'>
-                                                💸
-                                                <p>Ecónomico</p>
-                                              </div>
+                                <div className='card__body'>
+                                    <div className='comment' >
+                                        <h3 className='title'>
+                                        {element.author_name}
+                                        </h3>
+                                        <div className='block--stars-with-date'>
+                                          <p className='paragraph-stars'>
+                                            {
+                                              [...Array(element.meta.stars)].map((element)=>{
+                                                  return ("★")
+                                              })
+                                            }
+                                          </p>
+                                          <p className='paragraph-date' >
+                                            {date.toLocaleDateString('es-ES', formatDate)}
+                                            {/* 21 sep, 2021 */}
+                                          </p>
+                                        </div>
+                                        <span  dangerouslySetInnerHTML={{__html:element.content.rendered}}>
+                                        </span>
+                                    </div>
+                                    <details>
+                                      <summary>Detalles</summary>
+                                      <div className='content__comment-details'>
+                                        <div className='block__details'>
+                                            <div className='content__details'>
+                                                <div className='detail'>
+                                                  <p className='title--detail'>
+                                                    Calidez humana
+                                                  </p>
+                                                  <div className='description'>
+                                                    {element.acf.humanWarmth.substr(0,2)}
+                                                    <p>
+                                                    {element.acf.humanWarmth.substr(2)}
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                                <div className='detail'>
+                                                  <p className='title--detail'>
+                                                    Calidad educativa
+                                                  </p>
+                                                  <div className='description'>
+                                                  {element.acf.qualityEducative.substr(0,2)}
+                                                    <p>
+                                                  {element.acf.qualityEducative.substr(2)}
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                                <div className='detail'>
+                                                  <p className='title--detail'>
+                                                    Precio
+                                                  </p>
+                                                  <div className='description'>
+                                                  {element.acf.price.substr(0,2)}
+                                                    <p>
+                                                  {element.acf.price.substr(2)}
+                                                    </p>
+                                                  </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className='block__details'>
-                                        <div className='content__details'>
-                                            <div className='detail'>
-                                              <p className='title--detail'>
-                                              Impresion de padres
-                                              </p>
-                                              <div className='description'>
-                                                💕
-                                                <p>Excelente</p>
-                                              </div>
-                                            </div>
-                                            <div className='detail'>
-                                              <p className='title--detail'>
-                                                Imprensión de hijos
-                                              </p>
-                                              <div className='description'>
-                                                💕
-                                                <p>Excelente</p>
-                                              </div>
+                                        <div className='block__details'>
+                                            <div className='content__details'>
+                                                <div className='detail'>
+                                                  <p className='title--detail'>
+                                                  Impresion de padres
+                                                  </p>
+                                                  <div className='description'>
+                                                    {element.acf.feeling.substr(0,2)}
+                                                    <p>
+                                                    {element.acf.feeling.substr(2)}
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                                <div className='detail'>
+                                                  <p className='title--detail'>
+                                                    Imprensión de hijos
+                                                  </p>
+                                                  <div className='description'>
+                                                    {element.acf.feelingChildren.substr(0,2)}
+                                                    <p>
+                                                    {element.acf.feelingChildren.substr(2)}
+                                                    </p>
+                                                  </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                  </div>
-                                </details>
-                            </div>
-                        </div>
+                                      </div>
+                                    </details>
+                                </div>
+                              </div>                              
+                            )
+                          }) : ""
+
+                        }
+
+
+
+
                     </div>
                 </div>
               </div>
@@ -613,7 +688,7 @@ export default function Post({pageContext}) {
       </main>
       {commentActive && 
        <GlobalContextProvider>
-         <FormComment handleStateModal={handleStateModal}  post={school.databaseId}/>
+         <FormComment handleStateModal={handleStateModal} levels={pageContext.levelAndSchool.data.allWpLevelsSchool}  post={school.databaseId}/>
        </GlobalContextProvider>
       }
      

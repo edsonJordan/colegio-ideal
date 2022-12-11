@@ -70,62 +70,141 @@ exports.createPages = async ({ graphql, actions }) => {
             slug
           }
         }
+        comments {
+          nodes {
+            databaseId
+            content
+            author {
+              node {
+                ... on WpCommentAuthor {
+                  name
+                  databaseId
+                  avatar {
+                    default
+                    url
+                  }
+                }
+              }
+            }
+            customFieldsComentarios {
+              feeling
+              feelingchildren
+              fieldGroupName
+              humanwarmth
+              level
+              price
+              qualityeducative
+            }
+          }
+        }
+        content
       }
+      totalCount
     }
-  }  
+  }
+  
   `)
 
   
 
-  const queryResultsTaxonomies = await graphql(`
-  {
-    allWpStateSchool {
-      nodes {
-        name
-        slug
-        colegios {
-          nodes {
-            databaseId
-            slug
-            title 
-            status
-            customFieldColegio {
-              activities
-              approach
-              description
-              approach
-              lenguages
-              level
-              email
-              facebook
-              price
-              phone
-              proposal
-              whatsapp
-              web
-              type
+ 
+
+  
+
+
+
+    const queryResultsTaxonomies = await graphql(`
+    {
+      allWpStateSchool {
+        nodes {
+          name
+          slug
+          colegios {
+            nodes {
+              databaseId
+              slug
+              title
+              status
+              customFieldColegio {
+                activities
+                approach
+                description
+                approach
+                lenguages
+                level
+                email
+                facebook
+                price
+                phone
+                proposal
+                whatsapp
+                web
+                type
+              }
+              levelsSchools {
+                nodes {
+                  name
+                  databaseId
+                }
+              }
+              stateSchools {
+                nodes {
+                  databaseId
+                  name
+                }
+              }
+              typeSchools {
+                nodes {
+                  name
+                  databaseId
+                }
+              }
+              comments{
+								nodes{
+									databaseId
+                  content
+                  stars
+                }
+              }
             }
           }
         }
       }
     }
-  }  
-  `);
+    `);
 
-  const schoolTemplate = path.resolve(`src/templates/customPosts/schools.js`)
-  queryResults.data.allWpColegio.nodes.forEach(node => {
-    createPage({
-      path: `${node.uri}`,
-      component: schoolTemplate,
-      context: {
-        school: node,
-      },
+  const queryResultsLevelsAndTypeSchools = await graphql(`
+    query ($limit: Int = 100) {
+      allWpLevelsSchool(limit: $limit) {
+        nodes {
+          name
+          slug
+          databaseId
+        }
+      }
+      allWpTypeSchool(limit: $limit) {
+        nodes {
+          databaseId
+          slug
+          name
+        }
+      }
+    }
+  `);
+    const schoolTemplate = path.resolve(`src/templates/customPosts/schools.js`)
+    queryResults.data.allWpColegio.nodes.forEach(node => {
+      createPage({
+        path: `${node.uri}`,
+        component: schoolTemplate,
+        context: {
+          school: node,
+          levelAndSchool:queryResultsLevelsAndTypeSchools
+        },
+      })
     })
-  })
+    
+    
   
-    // <FindSchoolGlobalContextProvider>
-      
-    // </FindSchoolGlobalContextProvider>
   const schoolTemplateTaxonomies = path.resolve(`src/templates/taxonomies/states.js`)
   queryResultsTaxonomies.data.allWpStateSchool.nodes.forEach(node => {
     createPage({
@@ -133,9 +212,23 @@ exports.createPages = async ({ graphql, actions }) => {
       component: schoolTemplateTaxonomies,
       context: {
         school: node,
+        levelAndSchool:queryResultsLevelsAndTypeSchools
       },
     })
   })
 
+
+
+
+  /* const schoolTemplateUsers = path.resolve(`src/templates/users/user.js`)
+  queryResultsUsers.data.allWpUser.nodes.forEach(node => {
+    createPage({
+      path: `${node.slug}`,
+      component: schoolTemplateUsers,
+      context: {
+        school: node,
+      },
+    })
+  }) */
   
 }

@@ -139,7 +139,7 @@ span[class$=indicatorSeparator]{
     
     
     .card--modal-comment{
-        @apply  bg-white-default relative w-full top-28 p-8;
+        @apply  bg-white-default w-full top-24 p-8 sticky;
         height: fit-content;
     }
     /* Range Input */
@@ -256,6 +256,9 @@ span[class$=indicatorSeparator]{
     .btn--secondary{
         @apply bg-global-secondary-500 text-global-secondary-500 w-10 h-10 flex flex-col justify-center items-center rounded-full;
     }
+    .btn--secondary-ghost{
+        @apply bg-white-default text-global-secondary-500 border border-global-secondary-500 w-10 h-10 flex flex-col justify-center items-center rounded-full;
+    }
     .btn__ghost--secondary{
         @apply text-global-secondary-900 font-normal font-inter flex flex-col justify-center items-center rounded-full underline;
     }
@@ -339,7 +342,7 @@ span[class$=indicatorSeparator]{
     }
     
     .card--comment .card__body{
-        @apply flex flex-col gap-y-2 pb-8;
+        @apply flex flex-col gap-y-2 pb-2;
     }
     .card--coment .card__body .comment{
         @apply flex flex-col gap-y-1;
@@ -588,10 +591,10 @@ span[class$=indicatorSeparator]{
 }
 
 .carousel--container {
-    @apply pl-4;
+    @apply pl-4 w-full;
     /*  width: 272px;
     max-width: 100vw; */
-    width: 100%;
+    min-height: 26rem;
     /* overflow: visible !important; */
 }
 
@@ -1000,7 +1003,7 @@ span[class$=indicatorSeparator]{
     width: 245px;
 }
 .load-bar__content{
-    @apply w-2/5 h-full bg-global-blue-50 font-roboto font-normal text-global-gray-500 text-sm
+    @apply w-full h-full bg-global-blue-50 font-roboto font-normal text-global-gray-500 text-sm
     rounded-10 border border-global-gray-300 items-center
     flex flex-row  pl-2;
 }
@@ -1030,7 +1033,7 @@ span[class$=indicatorSeparator]{
     @apply flex flex-row justify-between
 }
 .block--comments .container--select .input--select{
-    @apply leading-4;
+    @apply leading-4 w-48;
     max-height: 36px;
 }
 .avatar--comment{
@@ -1111,6 +1114,12 @@ span[class$=indicatorSeparator]{
 }
 .star-5:checked ~ .check__label--star{
     @apply text-global-primary-500
+}
+.radio-paginate{
+    @apply hidden;
+}
+.radio-paginate:checked + label{
+    @apply bg-global-secondary-500 text-white-default
 }
 .block__checkbox--star{
     @apply flex justify-end gap-x-1;
@@ -1261,7 +1270,7 @@ span[class$=indicatorSeparator]{
         }
         /* Comments */
         .card--modal-comment{
-            @apply w-2/3;
+            @apply w-2/3 ;
         }
         .icon__modal-close{
             transform:translate(50%, -50%);
@@ -1350,6 +1359,7 @@ span[class$=indicatorSeparator]{
         .text--secondary{
             @apply text-sm leading-14px px-2 py-1;
         }
+        
         .carousel--container .card .card__body{
             @apply pt-4 px-4;
         }
@@ -1389,7 +1399,7 @@ span[class$=indicatorSeparator]{
             @apply py-6;
         }
         .carousel--container{
-            @apply p-0 pb-1;
+            @apply p-0 pb-4;
         }
         .section--findSchool{
             @apply flex flex-col;

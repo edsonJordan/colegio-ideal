@@ -21,7 +21,7 @@ export default  function GridSearch ({data}) {
   
   const getSchoolsFavorite = ()=>{
     if (!stateAuth.isLogin) return setFavorites([]);
-    fetch(`${process.env.WP_URL_REST}/apischool/v1/favorites/${stateAuth.data.username}`,{
+    fetch(`${process.env.WP_URL_REST}/apischool/v1/favorites/${stateAuth.data.id_user}`,{
       headers: {
         'Content-Type': 'application/json',
         'Authorization':`Bearer ${stateAuth.data.token}`
@@ -114,10 +114,9 @@ export default  function GridSearch ({data}) {
       }
     const setIdPost =  (idPost, isFavorite)=>{
       if(isFavorite){
-        !stateAuth.isLogin ? (window.location= '/login'): addPostFavorite(idPost, stateAuth.data.username);
-        
+        !stateAuth.isLogin ? (window.location= '/login'): addPostFavorite(idPost, stateAuth.data.id_user);        
       }else{
-        deletePostFavorite(idPost,stateAuth.data.username)
+        deletePostFavorite(idPost,stateAuth.data.id_user)
         // console.log(idPost,stateAuth.data.username);
       }
     }

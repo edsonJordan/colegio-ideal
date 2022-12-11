@@ -1,1 +1,1 @@
-export { default as FormUserPerfil } from "./grid"
+export { default as GridMeSchools } from "./gridMeSchools"

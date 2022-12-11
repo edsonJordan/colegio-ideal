@@ -47,6 +47,16 @@ export default function States({pageContext}) {
     const [orderFilter,setOrderFilter] = useState("")
     const [typeFilter,setTypeFilter] = useState("")
     const [levelFilter,setLevelFilter]= useState("")
+
+    const [typeOptions, setTypeOptions] = 
+    useState(pageContext.levelAndSchool.data.allWpTypeSchool.nodes.        
+        map(element=>{
+            return {value:element.name, label:element.name, name:"typeFilter"}}
+            )
+        );
+    const [levelOptions, setLevelOptions] = useState(pageContext.levelAndSchool.data.allWpLevelsSchool.nodes.
+        map(element=>{return {value:element.name, label:element.name, name:"levelFilter"}}));
+
     const [paramsSearch, setParamsSearch]= useState({typeSearch,orderFilter,typeFilter,levelFilter});
     const [countSearchEvent, setCountSearchEvent]=useState(0)
 
@@ -59,60 +69,51 @@ export default function States({pageContext}) {
         { value: 'punctuation', name:"orderFilter", label: 'Mejor Puntuación' },
         { value: 'favorites', name:"orderFilter", label: 'favoritos' },
     ];
-    const optionsTypeData= [
-        { value: '', name:"typeFilter", label: 'Seleccione tipo de colegio' },
-        { value: 'privado: Privado', name:"typeFilter", label: 'Privado' },
-        { value: 'público: Público', name:"typeFilter", label: 'Público' },
-    ];
-    const optionsLevelsData = [
-        { value: '', name:"levelFilter", label: 'Seleccione Un nivel' },
-        { value: 'kínder: Kínder', name:"levelFilter", label: 'Kínder' },
-        { value: 'jardín de niños: Jardín de niños', name:"levelFilter", label: 'Jardín de niños' },
-        { value: 'licenciatura en educación pre-escolar / primaria: Licenciatura en educación pre-escolar / primaria', name:"levelFilter", label: 'Licenciatura en educación pre-escolar / primaria' },
-        { value: 'maternal: Maternal', name:"levelFilter", label: 'Maternal' },
-        { value: 'pre-escolar: Pre-escolar', name:"levelFilter", label: 'Pre-escolar' },
-        { value: 'primaria: Primaria', name:"levelFilter", label: 'Primaria' },
-        { value: 'secundaria: Secundaria', name:"levelFilter", label: 'Secundaria' },
-        { value: 'preparatoria: Preparatoria', name:"levelFilter", label: 'Preparatoria' },
-        { value: 'preparatoria abierta: Preparatoria abierta', name:"levelFilter", label: 'Preparatoria abierta' },
-        { value: 'bachillerato: Bachillerato', name:"levelFilter", label: 'Bachillerato' },
-        { value: 'licenciatura: Licenciatura', name:"levelFilter", label: 'Licenciatura' },
-        { value: 'postgrado: Postgrado', name:"levelFilter", label: 'Postgrado' },
-        { value: 'carreras técnicas comerciales: Carreras técnicas comerciales', name:"levelFilter", label: 'Carreras técnicas comerciales' },
-        { value: 'universidad: Universidad', name:"levelFilter", label: 'Universidad' },
-        { value: 'lactantes: Lactantes', name:"levelFilter", label: 'Lactantes' },
-        { value: 'guardería: Guardería', name:"levelFilter", label: 'Guardería' },
-      ];
-    
+
     /* const showSchoolsWithParamts=()=>{
     } */
+
+    const resultRanking=(listNodesFromComments)=>{
+        if(listNodesFromComments.length==0)  return 3.5;
+        const numValuesFromStars =  listNodesFromComments.reduce((acumulator,currentValue)=>{
+              if(currentValue.stars == 1) acumulator[0][1]++
+              if(currentValue.stars == 2) acumulator[1][2]++
+              if(currentValue.stars == 3) acumulator[2][3]++
+              if(currentValue.stars == 4) acumulator[3][4]++
+              if(currentValue.stars == 5) acumulator[4][5]++
+              return acumulator},[{1:0},{2:0},{3:0},{4:0},{5:0}])
+      .map((element, index, array)=>{  return  element[(index+1)]*(index+1)})
+          return ((numValuesFromStars[0]+numValuesFromStars[1]+numValuesFromStars[2]+numValuesFromStars[3]+numValuesFromStars[4])/listNodesFromComments.length).toFixed(1);
+      }
 
     useEffect(()=>{         
         getSchoolsFavorite()    
                 setSchools(schools.map((element)=>{
                     return {
                         id_post: element.databaseId,       
-                        levels: element.customFieldColegio.level.map(element=>element.split(":")).map(element=>element[1]).map(element=>element.trim()),
+                        levels: element.levelsSchools.nodes.length > 0 ? element.levelsSchools.nodes.map(levelNode=>levelNode.name) : [],
                         nameSchool:element.title,
                         opinion:"buen trato economico",
                         phone:element.customFieldColegio.phone,
                         price: element.customFieldColegio.price,
                         slug:element.slug,
-                        stars:"3.6",
-                        typeSchool:element.customFieldColegio.type.split(":")[1].trim(),
+                        // stars:"3.6",
+                        stars:resultRanking(element.comments.nodes),
+                        typeSchool:element.typeSchools.nodes.length > 0 ? element.typeSchools.nodes.map(typeNode=>typeNode.name) : [],
                         ubication:null,
                         web:element.customFieldColegio.web,
                         whatsapp:element.customFieldColegio.whatsapp,
                         isFavorite:false
                     }
                 }))
-         
-        
+            setTypeOptions([{ value: "", name:"typeFilter", label: 'Seleccione tipo de colegio' }, ...typeOptions])
+            setLevelOptions([ { value: "", name:"levelFilter", label: 'Seleccione Un nivel' },...levelOptions])
+        console.log(schools);
     },[])
     const getSchoolsFavorite = ()=>{
         if (stateAuth === null) return setFavorites([]);
         // console.log(stateAuth);
-        fetch(`${process.env.WP_URL_REST}/apischool/v1/favorites/${stateAuth.username}`,{
+        fetch(`${process.env.WP_URL_REST}/apischool/v1/favorites/${stateAuth.id_user}`,{
           headers: {
             'Content-Type': 'application/json',
             'Authorization':`Bearer ${stateAuth.token}`
@@ -144,16 +145,16 @@ export default function States({pageContext}) {
         let schoolsFiltered =[...arrayToFilter]
         
         if(typeFilter !== ""){
-            const typeValue = typeFilter.split(':')[1].trim()
-            // console.log(typeValue);
-            schoolsFiltered = schoolsFiltered.filter(element=>element.typeSchool === typeValue) 
+            schoolsFiltered = schoolsFiltered.filter((element)=> element.typeSchool.includes(typeFilter)) 
         }
         if(levelFilter !== ""){
-            const levelValue = levelFilter.split(':')[1].trim()
-            schoolsFiltered = schoolsFiltered.filter((element)=> element.levels.includes(levelValue)) 
+            schoolsFiltered = schoolsFiltered.filter(element=> element.levels.includes(levelFilter)) 
         }
+        if(orderFilter === "punctuation"){           
+            schoolsFiltered = schoolsFiltered.filter((element)=> element.stars>3.3) 
+        }
+        // punctuation
         if(orderFilter === "favorites"){           
-            //    schoolsFiltered.map(element=>console.log(element));
             schoolsFiltered = schoolsFiltered.filter((element)=> element.isFavorite) 
         }
         if(typeSearch === "grid"){
@@ -163,6 +164,8 @@ export default function States({pageContext}) {
         /* if(countEvent>0) hiddenGroup(arrayToFilter)
         schoolsFiltered.map(element=> hiddenCard(element.id_post)) */
     }
+
+
     useEffect(()=>{
         // console.log(paramsSearch);
         setCountSearchEvent(countSearchEvent + 1)
@@ -172,9 +175,6 @@ export default function States({pageContext}) {
     useEffect(()=>{
         setDataIsReady(schools.map((element)=>{ return favorites.includes(element.id_post)? {...element, isFavorite:true}:{...element}})     )
     },[favorites])
-    useEffect(()=>{
-
-    }, [dataIsReady])
 
 
     /* Functions events favorites Schools */
@@ -192,6 +192,7 @@ export default function States({pageContext}) {
             }
           )
           .then((response)=>{
+            console.log("Escuela favorita echa");
             setDataIsReady(dataIsReady.map(element=>{return element.id_post === idPost ? {...element, isFavorite:true} : {...element}}))
             })
           .catch(({response})=>{ console.log(response)});      
@@ -219,9 +220,9 @@ export default function States({pageContext}) {
 
     const setIdPost =  (idPost, isFavorite)=>{
         if(isFavorite){
-         stateAuth === null ? (window.location= '/login'): addPostFavorite(idPost, stateAuth.username);          
+         stateAuth === null ? (window.location= '/login'): addPostFavorite(idPost, stateAuth.id_user);          
         }else{
-          deletePostFavorite(idPost,stateAuth.username)
+          deletePostFavorite(idPost,stateAuth.id_user)
           // console.log(idPost,stateAuth.data.username);
         }
     }
@@ -232,16 +233,8 @@ export default function States({pageContext}) {
 
 
     const  handleEventSearch = async (event) => {
-        // console.log(event.value);
          setParamsSearch ({...paramsSearch, [event.name]:event.value})
-         /* let dataFiltered = [...dataIsReady];
-        // console.log(event.value);
-        // const parst
-        console.log(dataFiltered.map(element=>element.levels));
-        if(event.value != ""){
-            // dataFiltered = dataFiltered.filter(element=> element.levels.includes("kínder: Kínder"))
-        }
-        console.log(dataFiltered); */
+         
     }
   return (
     <main className='main'>
@@ -273,6 +266,7 @@ export default function States({pageContext}) {
                                 <div className='form__block' >
                                     <label htmlFor="selectOrder" >Ordenado por</label>
                                     <Select
+                                       
                                         options={optionsOrderData}
                                         onChange={handleEventSearch}
                                     />
@@ -283,13 +277,13 @@ export default function States({pageContext}) {
                                         onChange={handleEventSearch}
                                         name="typeFilter"
                                         id='selectType'
-                                        options={optionsTypeData} />
+                                        options={typeOptions} />
                                 </div>
                                 
                                 <div className='form__block' >
                                     <label htmlFor="selectLevel" >Nivel</label>                        
                                     <Select
-                                            options={optionsLevelsData}
+                                            options={levelOptions}
                                             name="levelFilter" 
                                             onChange={handleEventSearch}  
                                             id='selectLevel'  

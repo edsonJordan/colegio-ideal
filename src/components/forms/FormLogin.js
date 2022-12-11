@@ -42,7 +42,7 @@ const  FormLogin = () => {
       switch (fetchLogin.status) {
         case 200:
           console.log("Loggin exitoso"); 
-          setLogin({token:fetchLogin.data.token, username:fetchLogin.data.user_display_name, user_email:fetchLogin.data.user_email})
+          setLogin({token:fetchLogin.data.token, id_user:fetchLogin.data.id, username:fetchLogin.data.user_display_name, user_email:fetchLogin.data.user_email})
           // navigate('/');
           if (typeof window !== `undefined`){ 
              
