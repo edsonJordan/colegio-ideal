@@ -132,15 +132,45 @@ span[class$=indicatorSeparator]{
         z-index: 99;
         background: rgb(39, 39, 42, .65);       
     }
+    .modal__delete{
+        @apply w-full h-full absolute z-30  flex flex-col items-center;
+        left: 0;
+        top: 0;
+        background: rgb(39, 39, 42, .65);
+    }
+    .modal__message{
+        @apply bottom-3 z-50 flex flex-row relative overflow-hidden;
+    }
     .icon__modal-close{
         @apply w-10 h-10 cursor-pointer absolute top-0 right-0 bg-global-gray-100 flex justify-center items-center rounded-full  ;
         transform: translate(-10%, -50%)
+    }
+    .message__success{
+        @apply flex flex-row border border-global-gray-200 w-fit py-4 pl-2 pr-8;
+    }
+    .modal__message::before{
+        content: "";
+        position: relative;
+        left: 0;
+        display:block;
+        width: 1rem;
+        height: 58px;
+        background-color: #41C213;
+
+
     }
     
     
     .card--modal-comment{
         @apply  bg-white-default w-full top-24 p-8 sticky;
         height: fit-content;
+    }
+
+    .card--modal-delete{
+        @apply top-32 rounded-md sticky w-2/4;
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+        padding: 2rem;
     }
     /* Range Input */
       .contain__slider-price{
@@ -244,6 +274,9 @@ span[class$=indicatorSeparator]{
     }
     .btn--primary{
         @apply bg-global-primary-500 text-global-third-500 font-bold font-roboto z-20 px-4;
+    }
+    .btn--danger{
+        @apply bg-global-danger-500 text-white-default font-bold font-roboto z-20 px-4;
     }
     .btn__ghost--primary{
         @apply border border-global-primary-500 text-global-third-500 font-bold font-roboto z-20 px-4;
@@ -517,6 +550,7 @@ span[class$=indicatorSeparator]{
         height: 32px;
         background-color: red;
     }
+    
     .grid--cards .card .card__body .paragraph{
         @apply text--body text-global-gray-500;
     }
@@ -616,6 +650,24 @@ span[class$=indicatorSeparator]{
         height: 32px;
         background-color: rgba(255, 255, 255, 0.65);
         transform: translate(-12px,12px)
+}
+.carousel--container .card.admin .card__header .icon__heart{
+    transform: translate(-48px,12px)
+}
+.carousel--container .card .card__header .icon__options{
+    @apply rounded-full items-center justify-center cursor-pointer;
+        position: absolute;
+        display: flex;
+        margin-right: 0px;
+        width: 32px;
+        height: 32px;
+        background-color: rgba(255, 255, 255, 0.65);
+        transform: translate(-12px,12px)
+}
+.carousel--container .card .card__header .icon__options .option__schools{
+    @apply items-center justify-center flex flex-col bg-white-default py-2 px-4 rounded-lg text-base font-roboto leading-6 text-global-gray-500 font-normal;
+        position: absolute;
+        transform: translate(-24px, 48px)
 }
 .carousel--container .card .card__header .img--card{
    @apply border-b border-global-gray-200;

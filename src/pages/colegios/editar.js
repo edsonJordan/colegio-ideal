@@ -1,13 +1,16 @@
 import React from "react"
-import axios from "axios";
 import GlobalContextProvider from "../../context/GlobalContextProvider";
 import { Footer, Header } from "../../components";
-import "mapbox-gl/dist/mapbox-gl.css";
 
-    
-import FormRegisterSchool from "../../components/forms/FormRegisterSchool";
-const  Agregar = ()=> {
 
+
+import FormUpdateSchool from "../../components/forms/FormUpdateSchool";
+import axios from "axios";
+const  Editar = ()=> {
+
+
+
+      
   return (
     <main className="main">       
         <GlobalContextProvider>
@@ -16,15 +19,15 @@ const  Agregar = ()=> {
         {/* <a onClick={submitRest} >Enviar rest</a> */}
         <section>
             <div className="section__image--portada agregar">
-                <h1 className="title--h5">Agregar colegio</h1>
+                <h1 className="title--h5">Editar colegio</h1>
             </div>
         </section>
         <GlobalContextProvider>
-            <FormRegisterSchool/>
+            <FormUpdateSchool/>
         </GlobalContextProvider>        
     <Footer/>
     </main>
   )
 }
-export default Agregar
+export default Editar
 

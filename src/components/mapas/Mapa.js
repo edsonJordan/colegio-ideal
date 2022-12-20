@@ -7,7 +7,7 @@ import Map, { Marker,
   GeolocateControl } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import {features} from '../../static/data/chicago-parks.json'
+// import {features} from '../../static/data/chicago-parks.json'
 import CardHorizontal from '../cards/CardHorizontal';
 
 // mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -19,7 +19,7 @@ export default function Mapa(props) {
 
   const [popupInfo, setPopupInfo] = useState(null);
 
-  const pins = useMemo(
+ /*  const pins = useMemo(
     () =>
     features.map((city, index) => (
       <>
@@ -61,7 +61,7 @@ export default function Mapa(props) {
       </>
       )),
     []
-  );
+  ); */
 
        
   return (
@@ -79,7 +79,7 @@ export default function Mapa(props) {
         <NavigationControl position="top-left" />
         <ScaleControl />
      
-        {pins}
+        {/* {pins} */}
 
         {popupInfo && (
           <Popup
