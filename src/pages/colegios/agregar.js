@@ -1,5 +1,4 @@
 import React from "react"
-import axios from "axios";
 import GlobalContextProvider from "../../context/GlobalContextProvider";
 import { Footer, Header } from "../../components";
 import "mapbox-gl/dist/mapbox-gl.css";

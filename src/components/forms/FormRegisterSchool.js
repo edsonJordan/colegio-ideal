@@ -315,6 +315,7 @@ const  FormRegisterSchool = ()=> {
                     }
                 }).then((response)=>{
                     console.log("Colegio agregado");
+                    window.location.reload(false);
                 }).catch((error)=>{
                     console.log(error);
                 });                  

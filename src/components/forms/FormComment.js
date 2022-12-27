@@ -36,22 +36,25 @@ export default function FormComment(props) {
 
   useEffect(()=>{
     // console.log(props.post);
-    // console.log(stateAuth.data.username);
+   
     // console.log(stateAuth.data.user_email);
     // console.log();
   }, [])
   
-  const seendComment =()=>{
-   /*  return axios.post(`${process.env.WP_URL_REST}/wp/v2/comments`, 
-    JSON.stringify(data),{headers: {
+  const updateStarsFromComment =(idComment,stars)=>{
+        const content ={
+            stars:stars
+        }
+    return axios.post(`${process.env.WP_URL_REST}/apischool/v1/comment/stars/${idComment}`, 
+    JSON.stringify(content),{headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${stateAuth.data.token}` 
         }
     }).then((response)=>{
-        console.log("Colegio agregado");
+        // console.log("Comentario guardado exitosamente");
     }).catch((error)=>{
         console.log(error);
-    });    */
+    });   
   }
 
   const handleSubmitComment=(e)=>{
@@ -66,22 +69,16 @@ export default function FormComment(props) {
 
   if(typeSchool.value === null || calidezSchool.value ===null || qualitySchool.value ===null || priceSchool.value ===null || feelingSchool.value ===null || feelingChildren.value ===null) return 
 
+//   return console.log(stateAuth.data.user_email);
   const data = {
     "post": props.post,
+    'author':stateAuth.data.id_user,
     "author_name": stateAuth.data.username,
     "author_email": stateAuth.data.user_email,
     "content": opinionSchool,
-    "meta":{
-        "stars":clasificationSchool,
-    },
-    /* "acf":{
-        "level":"hola mundo",
-        "humanWarmth":"💕Excelente",
-        "qualityEducative":"🤓Excelente",
-        "price":"💲Económico",
-        "feeling":"😎Muy bien",
-        "feelingChildren":"😄Bien"
-    } */
+    // "meta":{
+    //     "stars":clasificationSchool, 
+    // },
     "acf":{
         "level":typeSchool.value,
         "humanWarmth":calidezSchool.value,
@@ -91,16 +88,24 @@ export default function FormComment(props) {
         "feelingChildren":feelingChildren.value
     }
   };
+//   return console.log(data);
 //   console.log(data);
 //   return
 
     return axios.post(`${process.env.WP_URL_REST}/wp/v2/comments`, 
     JSON.stringify(data),{headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${stateAuth.data.token}` 
+        'accept': 'application/json',
+        'Authorization': `Bearer ${stateAuth.data.token}`  
         }
         }).then((response)=>{
-            console.log("Comentario agregado");
+            // console.log(response);
+            if(response.status === 201){
+                updateStarsFromComment(response.data.id, clasificationSchool)
+                props.handleStateModal(false)
+            }
+
+            // 
         }).catch((error)=>{
             console.log(error);
         });       

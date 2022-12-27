@@ -11,6 +11,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import {Header, Footer} from "../components"
+import { Link } from "gatsby"
 
 // const utmParameters = `?utm_source=starter&utm_medium=start-page&utm_campaign=default-starter`
 
@@ -51,9 +52,9 @@ const IndexPage = () => {
                 <h3 className="title--h6 section ">
                   Martha Marcano
                 </h3>
-                <label className="text--primary">
+                <p className="text--primary">
                   Contadora y madre
-                </label>
+                </p>
                 <p className="text--body" >
                   Me ayudaron a conseguir rapidamente el colegio ideal para mis hijos. Estoy realmente feliz
                 </p>
@@ -61,7 +62,7 @@ const IndexPage = () => {
           </div>
           <div className="content--block" >
             <h2 className="title--h6 title-carousel section" >
-              Las mejores instituciones estan aquí
+              Las mejores instituciones estan  aquí
             </h2>
             <Carousel className="carousel" centerMode={true} responsive={responsive} >
               <div className="flex flex-row item">
@@ -101,9 +102,9 @@ const IndexPage = () => {
               <p className="text--body" >
               Si eres miembro de algun instituto, padre de familia o alguien que simplemente conoce de algun instituto que considera deba de ser reconocido, agregalo a nuestro listado y deja que sea descubierto
               </p>
-              <a className="btn btn--normal btn--primary" >
+              <Link to="/" className="btn btn--normal btn--primary" >
                 Comenzar
-              </a>
+              </Link>
               </div>
             
             </div>            
@@ -112,9 +113,9 @@ const IndexPage = () => {
         <section className="section">
           <div className="section__image--portada-two" >
               <h2 className='title--h5'>Encontremos juntos el colegio que buscas</h2>
-              <a className="btn btn--normal btn--primary" >
+              <Link to="/" className="btn btn--normal btn--primary" >
                   Buscar instituto
-              </a>
+              </Link>
           </div>
         </section>
         <Footer/>

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react';
 import { Footer, Header } from '../../components';
 import { GridMeSchools } from '../../components/grids';
 import GlobalContextProvider from '../../context/GlobalContextProvider'

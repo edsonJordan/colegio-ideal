@@ -37,7 +37,7 @@ export default function CardHorizontal() {
                     placeholder="blurred"
                     layout="fixed"
                     />
-                    data                                
+                    ubicación                                
                 </li>                                
                 <li className='list__paragraph--icon emoticon'>
                     💕🤓💸

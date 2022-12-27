@@ -24,14 +24,14 @@ export default function Post({pageContext}) {
   const [countHumanWarmth, setCountHumanWarmth]=useState(40)
 
   /*  Form Components Comment*/
-  const [opinionSchool, setOpinionSchool]= useState("")
-  const [typeSchool, setTypeSchool] = useState({value:null,error:false, message:""})
-  const [clasificationSchool, setClasificactionSchool] = useState(3)
-  const [calidezSchool, setCalidezSchool] = useState({icon:null,value:null,text:null, error:false, message:""})
-  const [qualitySchool, setQualitySchool] = useState({icon:null,value:null,text:null, error:false, message:""})
-  const [priceSchool, setPriceSchool]     = useState({icon:null,value:null,text:null, error:false, message:""})
-  const [feelingSchool, setFeelingSchool] = useState({icon:null,value:null,text:null, error:false, message:""})
-  const [feelingChildren, setFeelingChildrenSchool]= useState({icon:null,value:null,text:null, error:false, message:""})
+  // const [opinionSchool, setOpinionSchool]= useState("")
+  // const [typeSchool, setTypeSchool] = useState({value:null,error:false, message:""})
+  // const [clasificationSchool, setClasificactionSchool] = useState(3)
+  // const [calidezSchool, setCalidezSchool] = useState({icon:null,value:null,text:null, error:false, message:""})
+  // const [qualitySchool, setQualitySchool] = useState({icon:null,value:null,text:null, error:false, message:""})
+  // const [priceSchool, setPriceSchool]     = useState({icon:null,value:null,text:null, error:false, message:""})
+  // const [feelingSchool, setFeelingSchool] = useState({icon:null,value:null,text:null, error:false, message:""})
+  // const [feelingChildren, setFeelingChildrenSchool]= useState({icon:null,value:null,text:null, error:false, message:""})
 
   const sortOldComments=(objectComments)=>{
       return objectComments.sort((a,b)=>{
@@ -56,7 +56,6 @@ export default function Post({pageContext}) {
     if(target.value==="betterCommets") return setCommentsFromPost(sortBetterComments([...commentsPost]))
     // setCommentsFromPost([...commentsPost])
 
-    {/* oldComments  newComments   betterCommets */}
     
   }
   const handleStateModal=(state)=>{
@@ -69,10 +68,8 @@ export default function Post({pageContext}) {
       .then(res=>res.json())
       .then((data)=>{
         setCommentsPost(data);
-        setCommentsFromPost(data)
-
-       
-        if(data.length == 0) return ;
+        setCommentsFromPost(data)       
+        if(data.length === 0) return ;
 
         let humanWarmth = 0
         let qualityEducative = 0
@@ -108,15 +105,12 @@ export default function Post({pageContext}) {
   }, [])
   useEffect(()=>{
   },[commentsFromPost])
-  
-
-
   return (
     <div className=" container ">
       <main  className='main'>
       <GlobalContextProvider>
             <Header/>
-        </GlobalContextProvider>
+      </GlobalContextProvider>
         <section className='section section--school'>
           <div className='content__school'>
               <div  className='block__left'>
@@ -360,7 +354,11 @@ export default function Post({pageContext}) {
                                 </option>
                           </select>
                         </div>
-                        <a onClick={()=>{setCommentActiveModal(true)}} className="btn btn--normal btn--primary">Escribir opinion</a>  
+                        <a onClick={()=>{
+                          setCommentActiveModal(true)
+                          }} 
+                            className="btn btn--normal btn--primary">Escribir opinion
+                        </a>  
                     </div>            
                 </div>
                 <div className='container__comment' >
@@ -604,83 +602,10 @@ export default function Post({pageContext}) {
                     </ul>
                 </div> 
               </aside>
-            </div>
-         
-
-          {/* Opiniones - Comentarios */}
-          
-            {/* <h2 ref={ref} className='title--h6 pl-4 pb-2' >
-                Colegios Similares
-            </h2>
-            <Carousel  itemClass="carousel-item--card" containerClass='carousel--container' centerMode={width<410 ? true : false}   responsive={responsive}>
-              {
-                  items.map(school => (
-                      <div key={school} className='card'>
-                          <div className='card__header'>
-                              <img className='img--card'  src="https://picsum.photos/seed/picsum/360/104"></img> 
-                              
-                          </div>
-                          <div className='card__body' >
-                              <h3 className='title' >
-                                  {school.nameSchool}
-                              </h3>
-                              <div className='items' >
-                                  <label className='text--ext-sm text--secondary text-label'>
-                                      Pública
-                                  </label>
-
-                                  <p className='item__stars' >  
-                                  ({school.stars}) 
-                                  </p>
-                              </div>
-                              <ul className='list' >
-                                  <li className='list__paragraph--icon'>
-                                      <StaticImage
-                                      src="../../static/svg/gratuation__cap.svg"
-                                      alt="A dinosaur"
-                                      placeholder="blurred"
-                                      layout="fixed"
-                                      />
-                                      {school.levels.join(',')}
-                                  </li>
-                                  <li className='list__paragraph--icon'>
-                                      <StaticImage
-                                      src="../../static/svg/map_point.svg"
-                                      alt="A dinosaur"
-                                      placeholder="blurred"
-                                      layout="fixed"
-                                      />
-                                      {school.ubication}                                    
-                                  </li>                                
-                                  <li className='list__paragraph--icon emoticon'>
-                                      💕🤓💸
-                                  </li>
-                                  <li className='list__paragraph--icon price'>                                    
-                                      ${school.price}                                    
-                                  </li>
-                              </ul>
-                          </div>
-                          <div className='card__footer' >
-                              <ul className='list'>
-                                  <li>
-                                      <a className='btn__ghost--secondary btn--ext-sm' href='#' >
-                                          Leer Más
-                                      </a>
-                                  </li>
-                                  <li>
-                                      <a className='btn__ghost--secondary btn--ext-sm' href='#' >
-                                          Contactar
-                                      </a>
-                                  </li>
-                              </ul>
-                          </div>
-                      </div>
-                    ))
-              }                
-            </Carousel>
-            <br/> */}
+          </div>
+          {/* Opiniones - Comentarios */}    
         <GlobalContextProvider>
-            <SliderHorizontal title={"Colegios similares"} />
+            <SliderHorizontal type={"favorites"} title={"Colegios similares"} />
             {/* <SliderHorizontal title={"Cerca de tí"} /> */}
         </GlobalContextProvider>
         </section>
@@ -690,8 +615,7 @@ export default function Post({pageContext}) {
        <GlobalContextProvider>
          <FormComment handleStateModal={handleStateModal} levels={pageContext.levelAndSchool.data.allWpLevelsSchool}  post={school.databaseId}/>
        </GlobalContextProvider>
-      }
-     
+      }    
     </div>
   );
 }

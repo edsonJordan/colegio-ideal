@@ -37,8 +37,7 @@ export default function Grid() {
         (response) => {
 
           setLoadGetFavorite(false)
-          firstLoad && setPaginateTotalSchool(parseInt( response.headers['x-wp-totalpages'])); 
-          
+          firstLoad && setPaginateTotalSchool(parseInt( response.headers['x-wp-totalpages']));           
           setFavorites(response.data.map((element)=>{     
             return {
             id_post:element.id_post,

@@ -1,12 +1,13 @@
 import React from 'react'
 import { StaticImage } from "gatsby-plugin-image"
+import log_bg from '../static/images/log-bg.png';
 
 export default function Footer() {
   return (
     <footer className="footer" >
           <div className="footer__content">
             <StaticImage className="image--logo " src="../static/images/logo-normal.png" alt="A dinosaur" placeholder="blurred" layout="fixed"/>
-            <p className="paragraph" >¿Tienes alguna duda? <a className="btn__ghost--secondary" >Dejanos un mensaje</a>
+            <p className="paragraph" >¿Tienes alguna duda?<a className="btn__ghost--secondary" >Dejanos un mensaje</a>
             </p>
             <div className="list__paragraph--icon" > 
               <StaticImage
@@ -45,8 +46,8 @@ export default function Footer() {
           <p className="copyright" >
             Todos los derechos reservados Tu colegio ideal © Copyright 2021
           </p>
-          <StaticImage className="bg-logo"
-                  src="../static/images/log-bg.png"
+          <img className="bg-logo"
+                  src={log_bg}
                   alt="A dinosaur"
                   placeholder="blurred"
                   layout="fixed" />

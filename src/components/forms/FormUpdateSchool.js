@@ -1,9 +1,8 @@
 import React, { useState,useEffect, useRef, useContext }  from "react"
 import Select from 'react-select'
-import { Country, State }  from 'country-state-city';
+import { Country }  from 'country-state-city';
 import axios from "axios";
 import {
-    GlobalDispatchContext,
     GlobalStateContext,
   } from "../../context/GlobalContextProvider"
 import marker_map from "../../static/svg/marker_map.svg"
@@ -18,7 +17,7 @@ const  FormRegisterSchool = ()=> {
     /* Status Global */
     const stateAuth =  useContext(GlobalStateContext)
 
-    const [schoolToUpdate, setSchoolToUpdate]=useState(null);
+    // const [schoolToUpdate, setSchoolToUpdate]=useState(null);
 
     /* States of inputs */
     const [nameSchool, setNameSchool] = useState("");   
@@ -213,7 +212,7 @@ const  FormRegisterSchool = ()=> {
              setLevelSchool(levelsSchool)
             // Price 
             const prices = school.acf.price.split('-');
-            if(prices.length == 2 
+            if(prices.length === 2 
                 && !Number.isNaN(parseInt(prices[0])) 
                 && !Number.isNaN(parseInt(prices[1])) 
                 && parseInt(prices[0]) <= (parseInt(prices[1])-200)){
@@ -438,7 +437,8 @@ const  FormRegisterSchool = ()=> {
                     'Authorization': `Bearer ${stateAuth.data.token}` 
                     }
                 }).then((response)=>{
-                    console.log("Colegio agregado");
+                    window.location.reload(false);
+
                 }).catch((error)=>{
                     console.log(error);
                 });                  
@@ -451,9 +451,9 @@ const  FormRegisterSchool = ()=> {
         setStates(states)       
         clearSelectStates() */
     }     
-    const clearSelectStates = () => {
+    /* const clearSelectStates = () => {
         stateRef.current.setValue("")
-    };
+    }; */
     const levelItems = (event)=>{
         let { value, checked } = event.target;
         checked  ? setLevelSchool([...levelSchool, parseInt(value)]) : setLevelSchool(levelSchool.filter((element)=>element !== parseInt(value)))
@@ -572,7 +572,7 @@ const  FormRegisterSchool = ()=> {
                                 return listLanguageSchool.includes(element.value) ? {...element, checked:true}:{...element}
                             }).map((element, index)=>{
                                 return (
-                                    <div key={element+index} className="block__checkbox"> 
+                                    <div key={index+"language"} className="block__checkbox"> 
                                         <input 
                                         type="checkbox"  
                                         defaultChecked={element.checked} 
@@ -587,7 +587,7 @@ const  FormRegisterSchool = ()=> {
                             :
                             languagesDefaultSchool.map((element, index)=>{
                                 return (
-                                    <div key={element+index} className="block__checkbox"> 
+                                    <div key={index+"language"} className="block__checkbox"> 
                                         <input type="checkbox" 
                                         className="input__check" 
                                         id={element.id} 
@@ -607,7 +607,7 @@ const  FormRegisterSchool = ()=> {
                                 return listApproachSchool.includes(element.value) ? {...element, checked:true}:{...element}
                             }).map((element, index)=>{
                                 return (
-                                    <div key={element+index+"-enfoque"} className="block__checkbox"> 
+                                    <div key={index+"-enfoque"} className="block__checkbox"> 
                                         <input 
                                         type="checkbox"                                          
                                         name="approach[]"
@@ -623,7 +623,7 @@ const  FormRegisterSchool = ()=> {
                             :
                             approachDefaultSchool.map((element, index)=>{
                                 return (
-                                    <div key={element+index+"-enfoque"} className="block__checkbox"> 
+                                    <div key={index+"-enfoque"} className="block__checkbox"> 
                                         <input 
                                         type="checkbox"  
                                         name="approach[]"
@@ -646,7 +646,7 @@ const  FormRegisterSchool = ()=> {
                                 return listActivitiesSchool.includes(element.value) ? {...element, checked:true}:{...element}
                             }).map((element, index)=>{
                                 return (
-                                    <div key={element+index+"-activities"} className="block__checkbox"> 
+                                    <div key={index+"-activities"} className="block__checkbox"> 
                                         <input 
                                         type="checkbox"   
                                         defaultChecked={element.checked} 
@@ -661,7 +661,7 @@ const  FormRegisterSchool = ()=> {
                             :
                             activitiesDefaultSchool.map((element, index)=>{
                                 return (
-                                    <div key={element+index+"-activities"} className="block__checkbox"> 
+                                    <div key={index+"-activities"} className="block__checkbox"> 
                                         <input 
                                         type="checkbox"  
                                         className="input__check" 
@@ -733,7 +733,7 @@ const  FormRegisterSchool = ()=> {
                                 latitude={ubicationMap.lat}
                                 anchor="bottom"
                                 >    
-                                <img src={marker_map}>
+                                <img alt="" src={marker_map}>
                                 </img>
                                 
                                 </Marker>
@@ -780,7 +780,7 @@ const  FormRegisterSchool = ()=> {
                         <label  className=" block__thumbnail overflow-hidden" style={{backgroundImage:imagesForm.thumbnail !== null ? "" : imagesForm.thumbnail }} htmlFor="thumbnail">
                             {
                               imagesForm.thumbnail.path !== null ?
-                              <img className=" object-contain" src={ imagesForm.thumbnail.path} />  
+                              <img alt="" className=" object-contain" src={ imagesForm.thumbnail.path} />  
                               :
                               <>
                                 <p className="title__thumbnail">Cargar fotos</p>
@@ -798,7 +798,7 @@ const  FormRegisterSchool = ()=> {
                         <label className="block__thumbnail overflow-hidden" htmlFor="facade">
                         {
                               imagesForm.facade.path !== null ?
-                              <img className=" object-contain" src={ imagesForm.facade.path} />  
+                              <img alt="" className=" object-contain" src={ imagesForm.facade.path} />  
                               :
                               <>
                                 <p className="title__thumbnail">Cargar fotos</p>
@@ -816,7 +816,7 @@ const  FormRegisterSchool = ()=> {
                         <label className="block__thumbnail overflow-hidden" htmlFor="instalation">
                             {
                               imagesForm.instalation.path !== null ?
-                              <img className=" object-contain" src={ imagesForm.instalation.path} />  
+                              <img alt="" className=" object-contain" src={ imagesForm.instalation.path} />  
                               :
                               <>
                                 <p className="title__thumbnail">Cargar fotos</p>
@@ -834,7 +834,7 @@ const  FormRegisterSchool = ()=> {
                         <label className="block__thumbnail overflow-hidden" htmlFor="others">
                             {
                               imagesForm.others.path !== null ?
-                              <img className=" object-contain" src={ imagesForm.others.path} />  
+                              <img alt="" className=" object-contain" src={ imagesForm.others.path} />  
                               :
                               <>
                                 <p className="title__thumbnail">Cargar fotos</p>

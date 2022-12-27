@@ -1,11 +1,8 @@
-import React, {useEffect, useState, useContext } from 'react';
+import React, {useEffect, useState } from 'react';
 import Select from 'react-select';
 import Footer from '../../components/footer'
 import Header from '../../components/header'
-import GlobalContextProvider, {
-    GlobalDispatchContext,
-    GlobalStateContext,
-  } from "../../context/GlobalContextProvider"
+import GlobalContextProvider from "../../context/GlobalContextProvider"
 
 
 
@@ -14,26 +11,18 @@ import CardVertical from '../../components/cards/CardVertical';
 import axios from 'axios';
 
 
-export function ShowCardList({data}){
-    // const [dataSchools, setDataSchools]= useState(schools)
-
-
+/* export function ShowCardList({data}){
     return(
         <>
           <div className='container__cards'>  
             <GlobalContextProvider>
-                {/* {schools.lenght > 0 ? <HandleSearch schools={schools}/>:"vacio" } */}
-                {/* {console.log(data)} */}
-            </GlobalContextProvider>
-           
-           <a className='btn btn--normal btn--secondary' >
+            </GlobalContextProvider>           
+           <p className='btn btn--normal btn--secondary' >
                     Cargar mas
-            </a>
+            </p>
         </div>
         </>)
-        
-        
-}
+} */
 
 
 
@@ -49,13 +38,13 @@ export default function States({pageContext}) {
     const [levelFilter,setLevelFilter]= useState("")
 
     const [typeOptions, setTypeOptions] = 
-    useState(pageContext.levelAndSchool.data.allWpTypeSchool.nodes.        
-        map(element=>{
+    useState(pageContext.levelAndSchool.data.allWpTypeSchool.nodes
+        .map(element=>{
             return {value:element.name, label:element.name, name:"typeFilter"}}
             )
         );
-    const [levelOptions, setLevelOptions] = useState(pageContext.levelAndSchool.data.allWpLevelsSchool.nodes.
-        map(element=>{return {value:element.name, label:element.name, name:"levelFilter"}}));
+    const [levelOptions, setLevelOptions] = useState(pageContext.levelAndSchool.data.allWpLevelsSchool.nodes
+        .map(element=>{return {value:element.name, label:element.name, name:"levelFilter"}}));
 
     const [paramsSearch, setParamsSearch]= useState({typeSearch,orderFilter,typeFilter,levelFilter});
     const [countSearchEvent, setCountSearchEvent]=useState(0)
@@ -65,7 +54,7 @@ export default function States({pageContext}) {
     const [dataIsReady, setDataIsReady ]=useState([])
 
     const optionsOrderData= [
-        { value: '', name:"orderFilter", label: 'Seleccione el tipo de orden' },
+        { value: '', name:"orderFilter", label: 'Todos los registros' },
         { value: 'punctuation', name:"orderFilter", label: 'Mejor Puntuación' },
         { value: 'favorites', name:"orderFilter", label: 'favoritos' },
     ];
@@ -74,13 +63,13 @@ export default function States({pageContext}) {
     } */
 
     const resultRanking=(listNodesFromComments)=>{
-        if(listNodesFromComments.length==0)  return 3.5;
+        if(listNodesFromComments.length===0)  return 3.5;
         const numValuesFromStars =  listNodesFromComments.reduce((acumulator,currentValue)=>{
-              if(currentValue.stars == 1) acumulator[0][1]++
-              if(currentValue.stars == 2) acumulator[1][2]++
-              if(currentValue.stars == 3) acumulator[2][3]++
-              if(currentValue.stars == 4) acumulator[3][4]++
-              if(currentValue.stars == 5) acumulator[4][5]++
+              if(currentValue.stars === 1) acumulator[0][1]++
+              if(currentValue.stars === 2) acumulator[1][2]++
+              if(currentValue.stars === 3) acumulator[2][3]++
+              if(currentValue.stars === 4) acumulator[3][4]++
+              if(currentValue.stars === 5) acumulator[4][5]++
               return acumulator},[{1:0},{2:0},{3:0},{4:0},{5:0}])
       .map((element, index, array)=>{  return  element[(index+1)]*(index+1)})
           return ((numValuesFromStars[0]+numValuesFromStars[1]+numValuesFromStars[2]+numValuesFromStars[3]+numValuesFromStars[4])/listNodesFromComments.length).toFixed(1);
@@ -88,7 +77,7 @@ export default function States({pageContext}) {
 
     useEffect(()=>{         
         getSchoolsFavorite()    
-                setSchools(schools.map((element)=>{
+            setSchools(schools.map((element)=>{
                     return {
                         id_post: element.databaseId,       
                         levels: element.levelsSchools.nodes.length > 0 ? element.levelsSchools.nodes.map(levelNode=>levelNode.name) : [],
@@ -106,13 +95,13 @@ export default function States({pageContext}) {
                         isFavorite:false
                     }
                 }))
-            setTypeOptions([{ value: "", name:"typeFilter", label: 'Seleccione tipo de colegio' }, ...typeOptions])
-            setLevelOptions([ { value: "", name:"levelFilter", label: 'Seleccione Un nivel' },...levelOptions])
-        console.log(schools);
+            setTypeOptions([{ value: "", name:"typeFilter", label: 'Todos los registros' }, ...typeOptions])
+            setLevelOptions([ { value: "", name:"levelFilter", label: 'Todos los registros' },...levelOptions])
+        // console.log(schools);
     },[])
     const getSchoolsFavorite = ()=>{
         if (stateAuth === null) return setFavorites([]);
-        // console.log(stateAuth);
+        // console.log(stateAuth);  
         fetch(`${process.env.WP_URL_REST}/apischool/v1/favorites/${stateAuth.id_user}`,{
           headers: {
             'Content-Type': 'application/json',
@@ -258,7 +247,7 @@ export default function States({pageContext}) {
 
            
                 { 
-                    paramsSearch.typeSearch == "grid"
+                    paramsSearch.typeSearch === "grid"
                     ? 
                     <>
                      <form className='form-paramts' >

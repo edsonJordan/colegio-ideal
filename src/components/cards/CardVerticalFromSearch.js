@@ -74,7 +74,7 @@ export default function CardVerticalFromSearch(props) {
                     💛😄💸
                 </li>
                 <li className='list__paragraph--icon price'>                                    
-                    ${props.school.price}                                    
+                    {props.school.price} MXN                                    
                 </li>
             </ul>
         </div>

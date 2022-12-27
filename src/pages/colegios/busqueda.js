@@ -8,7 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'; */
 import CardHorizontal from '../../components/cards/CardHorizontal';
 import Mapa from '../../components/mapas/Mapa';
 
-export function showCardList({typeSearch}){
+export function showCardList(){
+    // propos default typeSeach
     // console.log(typeSearch);
     return(
         <div className='container__cards'>            
@@ -21,9 +22,9 @@ export function showCardList({typeSearch}){
                 <CardHorizontal/>
                 <CardHorizontal/>                
            </div>
-           <a className='btn btn--normal btn--secondary' >
+           <p  className='btn btn--normal btn--secondary' >
                     Cargar mas
-            </a>
+            </p>
         </div>
         )
 }

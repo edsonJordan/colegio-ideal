@@ -132,7 +132,7 @@ export default function FindSchool({data}) {
   return (
     <section className='section section--findSchool' >
         <div className="section__image--portada" >
-            <h1 className='title--h5'>Encuentra rapidamente el colegio ideal</h1>
+            <h1 className='title--h5'>Encuentra rapidamente a tu colegio ideal</h1>
         </div>
         <div className='section__blockSeach' >
             <div /* onSubmit={(e)=>{handleFormSearch(e)}} */  className='blockSearch__content' >
@@ -145,7 +145,7 @@ export default function FindSchool({data}) {
                     <Select onChange={(data)=>{handleParamToSeach(data)}} className="create-select" options={optionsLevel} />
                 </div>
                 <div className='form__group'>
-                    <label htmlFor='group__label--ubication'  className='group__label'>Ubicación</label>
+                    <label htmlFor='group__label--ubication'  className='group__label'>Estado</label>
                     <Select onChange={(data)=>{handleParamToSeach(data)}} className="create-select" options={states} />
                 </div>
                 <div className='form__group'>
@@ -168,7 +168,7 @@ export default function FindSchool({data}) {
         <div className='grid--cards' >
             <div className='card'>
                 <div className='card__header'>
-                    <a  className='icon--secondary' >
+                    <div  className='icon--secondary' >
                         <StaticImage
                         src="../../static/svg/search-white.svg"
                         alt="A dinosaur"
@@ -177,7 +177,7 @@ export default function FindSchool({data}) {
                         width={18}
                         height={18}
                         />
-                    </a>
+                    </div>
                     <h6 className='title--h6'>
                         Busca
                     </h6>
@@ -190,7 +190,7 @@ export default function FindSchool({data}) {
             </div>
             <div className='card'>
                 <div className='card__header'>
-                    <a  className='icon--secondary' >
+                    <div  className='icon--secondary' >
                         <StaticImage
                         src="../../static/svg/paper-white.svg"
                         alt="A dinosaur"
@@ -199,7 +199,7 @@ export default function FindSchool({data}) {
                         width={18.64}
                         height={24}  
                         />
-                    </a>
+                    </div>
                     <h6 className='title--h6'>
                         Compara
                     </h6>
@@ -212,7 +212,7 @@ export default function FindSchool({data}) {
             </div>
             <div className='card'>
                 <div className='card__header'>
-                    <a  className='icon--secondary' >
+                    <div  className='icon--secondary' >
                         <StaticImage
                         src="../../static/svg/check-white.svg"
                         alt="A dinosaur"
@@ -221,7 +221,7 @@ export default function FindSchool({data}) {
                         width={24}
                         height={24}
                         />
-                    </a>
+                    </div>
                     <h6 className='title--h6'>
                         Elije
                     </h6>
@@ -235,7 +235,9 @@ export default function FindSchool({data}) {
         </div>
         <div className='section__carousel ' >
         <GlobalContextProvider>
-            <SliderHorizontal type={"ranking"} title={"Populares"} />
+            
+            <SliderHorizontal type={"stars"} title={"Colegios populares en mexico"} />
+            <SliderHorizontal type={"favorites"} title={"Cerca de ti"} />
             {/* <SliderHorizontal title={"Cerca de tí"} /> */}
         </GlobalContextProvider>
         </div>

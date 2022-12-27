@@ -7,7 +7,7 @@ import Map, { Marker,
   GeolocateControl } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-// import {features} from '../../static/data/chicago-parks.json'
+import {features} from '../../static/data/chicago-parks.json'
 import CardHorizontal from '../cards/CardHorizontal';
 
 // mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -19,14 +19,13 @@ export default function Mapa(props) {
 
   const [popupInfo, setPopupInfo] = useState(null);
 
- /*  const pins = useMemo(
+  const pins = useMemo(
     () =>
     features.map((city, index) => (
-      <>
-      
+      <div  key={`marker-${index}`}>      
         <Marker 
           className="maker-map"
-          key={`marker-${index}`}
+          // key={`marker-child-${index}`}
           longitude={city.geometry.coordinates[0]}
           latitude={city.geometry.coordinates[1]}
           anchor="right"
@@ -41,7 +40,7 @@ export default function Mapa(props) {
         </Marker>
         <Marker 
           className="maker-map--title"
-          key={`marker-${index}`}
+          // key={`marker2-${index}-${index}`}
           longitude={city.geometry.coordinates[0]}
           latitude={city.geometry.coordinates[1]}
           anchor="center"
@@ -54,14 +53,14 @@ export default function Mapa(props) {
           }}
         >    
         <div className='bg-white-default w-fit h-fit rounded-10 p-2'>
-          gola
+          Colegio ideal
           </div>
         </Marker>
         
-      </>
+      </div>
       )),
     []
-  ); */
+  );
 
        
   return (
@@ -79,7 +78,7 @@ export default function Mapa(props) {
         <NavigationControl position="top-left" />
         <ScaleControl />
      
-        {/* {pins} */}
+        {pins}
 
         {popupInfo && (
           <Popup

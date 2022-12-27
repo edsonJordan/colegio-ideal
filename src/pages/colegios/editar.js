@@ -1,11 +1,7 @@
 import React from "react"
 import GlobalContextProvider from "../../context/GlobalContextProvider";
 import { Footer, Header } from "../../components";
-
-
-
 import FormUpdateSchool from "../../components/forms/FormUpdateSchool";
-import axios from "axios";
 const  Editar = ()=> {
 
 

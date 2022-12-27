@@ -37,10 +37,7 @@ const  Createschool = ()=> {
                         "description": "Esto es creación desde gatsby",
                   }
                 };
-                  let headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization:': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0LzIwMjIvUHJveWVjdG9Db2xlZ2lvcyIsImlhdCI6MTY2NzcwODYwNywibmJmIjoxNjY3NzA4NjA3LCJleHAiOjE2NjgzMTM0MDcsImRhdGEiOnsidXNlciI6eyJpZCI6IjEifX19.dSSL_QKJEkzd-Dg3CICwB1PRFPPeDoGR35gAK6U2jmw`
-                  }   
+                  
 
                 return axios.post('http://localhost/2022/ProyectoColegios/wp-json/wp/v2/colegio', 
                 JSON.stringify(data),{headers: {
@@ -108,7 +105,7 @@ const  Createschool = ()=> {
 
   return (
     <div>
-        <a onClick={submitRest} >Enviar rest</a>
+        <p onClick={submitRest} >Enviar rest</p>
         <form  >
                 <h1 className="text-3xl font-bold underline">
                 Hello world!

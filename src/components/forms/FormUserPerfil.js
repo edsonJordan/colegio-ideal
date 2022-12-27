@@ -1,12 +1,12 @@
 import React,{ useEffect,useState } from 'react'
 import { useContext } from 'react'
-import { GlobalDispatchContext, GlobalStateContext } from '../../context/GlobalContextProvider'
+import {  GlobalStateContext } from '../../context/GlobalContextProvider'
 import { StaticImage } from "gatsby-plugin-image"
 import axios from 'axios'
 
 
 export default function FormUserPerfil() {
-    const setLogin = useContext(GlobalDispatchContext)
+    // const setLogin = useContext(GlobalDispatchContext)
     const stateAuth = useContext(GlobalStateContext)
     const [countSchoolsFavorites, setCountSchoolsFavorites]= useState(0);
 
@@ -14,7 +14,7 @@ export default function FormUserPerfil() {
         const data = {
             "user": user_name,
             }; 
-            axios.post(`${process.env.WP_URL_REST}`+`/apischool/v1/favorites/${user_name}`, JSON.stringify(data),
+            return axios.post(`${process.env.WP_URL_REST}/apischool/v1/favorites/${user_name}`, JSON.stringify(data),
             {
               headers: {
                 'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export default function FormUserPerfil() {
                     {countSchoolsFavorites}
                 </p>
                 <p className='block-dashboard__title'>
-                    Favoritos
+                     Favoritos
                 </p>
             </li>
             <li className='block-dashboard' >

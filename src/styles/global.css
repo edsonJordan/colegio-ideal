@@ -856,7 +856,7 @@ span[class$=indicatorSeparator]{
     transform:  translate(-200%, -200%)
 }
 .form__block .btn--primary{
-    @apply w-full justify-center mt-2;
+    @apply w-full justify-center mt-2  h-8 ;
 }
 .form__block .btn--secondary{
     @apply w-full justify-center mt-2 bg-opacity-0 border border-global-secondary-500 h-9 rounded-md font-roboto ;
@@ -1605,10 +1605,10 @@ span[class$=indicatorSeparator]{
             @apply title--h2;
         }
         .block__left{
-        @apply w-6/12
+        @apply w-3/5
         }
         .aside-school{
-        @apply  w-7/12 ;
+        @apply  w-2/5 ;
         }
         .block__left .block--school-images .image{
             /* @apply h-80 !important; */
@@ -1618,10 +1618,10 @@ span[class$=indicatorSeparator]{
         /* View School */
         
         .block__left{
-            @apply w-4/12
+            @apply w-6/12
             }
             .aside-school{
-            @apply  w-5/12 ;
+            @apply  w-4/12 ;
             }
     }
 

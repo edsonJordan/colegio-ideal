@@ -41,15 +41,15 @@ export default function SliderHorizontal(props) {
       }
 
       const resultRanking=(listNodesFromComments)=>{        
-        if(listNodesFromComments.length==0)  return 3.5;
+        if(listNodesFromComments.length===0)  return 3.5;
         const numValuesFromStars =  listNodesFromComments
           .map(element=>parseInt(element.comment_fields.stars[0]))
           .reduce((acumulator,currentValue)=>{
-              if(currentValue == 1) acumulator[0][1]++
-              if(currentValue == 2) acumulator[1][2]++
-              if(currentValue == 3) acumulator[2][3]++
-              if(currentValue == 4) acumulator[3][4]++
-              if(currentValue == 5) acumulator[4][5]++
+              if(currentValue === 1) acumulator[0][1]++
+              if(currentValue === 2) acumulator[1][2]++
+              if(currentValue === 3) acumulator[2][3]++
+              if(currentValue === 4) acumulator[3][4]++
+              if(currentValue === 5) acumulator[4][5]++
               return acumulator},[{1:0},{2:0},{3:0},{4:0},{5:0}])
       .map((element, index, array)=>{  return  element[(index+1)]*(index+1)})
       return ((numValuesFromStars[0]+numValuesFromStars[1]+numValuesFromStars[2]+numValuesFromStars[3]+numValuesFromStars[4])/listNodesFromComments.length).toFixed(1);
@@ -74,7 +74,8 @@ export default function SliderHorizontal(props) {
         }
 
       const getRankingSchools=()=>{
-          fetch(`${process.env.WP_URL_REST}/apischool/v1/ranking`,{
+        // console.log(props.type);
+          fetch(`${process.env.WP_URL_REST}/apischool/v1/ranking/${props.type}`,{
             headers: {
               'Content-Type': 'application/json',
             }
@@ -184,8 +185,8 @@ export default function SliderHorizontal(props) {
           useEffect(() => {
             // widthScreen < 425 ? setIsMobile(true) :setIsMobile(false)
             // getSchools();
-            getRankingSchools()
             getSchoolsFavorites();
+            getRankingSchools()
           },[])
           
           useEffect(() => {
@@ -225,13 +226,18 @@ export default function SliderHorizontal(props) {
              </h2>
              <Carousel  itemClass="carousel-item--card" containerClass='carousel--container' centerMode={width<410 ? true : false}   responsive={responsive}>
              {
+                  favoritesSchools.length > 0  ?
                   schools
                   .map((element)=>{ return favoritesSchools.includes(element.id_post)? {...element, isFavorite:true}:{...element}})
                   .map((element,index) => {
                    return <CardVertical key={index} isFavorite={element.isFavorite}  setValue={setValue} setIdPost={flowParentToChild} school={element}/>         
-                  }
-                   
-                   )
+                  }                   
+                ):
+                schools                  
+                  .map((element,index) => {
+                   return <CardVertical key={index} isFavorite={element.isFavorite}  setValue={setValue} setIdPost={flowParentToChild} school={element}/>         
+                  }                   
+                )
              }                
              </Carousel>
             

@@ -7,12 +7,10 @@ import { useRef } from "react"
 import { Link } from "gatsby"
 const  FormRegisterUser = () => {  
     const setLogin = useContext(GlobalDispatchContext)
-    const statusLogin = useContext(GlobalStateContext)
     
-    const [userName, setUserName] = useState("");
-    const [userEmail, setUserEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [messageLoggin, setMessageLoggin] = useState("");
+    const [userName, setUserName] = useState({value:"", error:false, message:""});
+    const [userEmail, setUserEmail] = useState({value:"", error:false, message:""});
+    const [password, setPassword] = useState({value:"", error:false, message:""});
 
     const stateRefPassword = useRef();
     const [passwordIsActive, setPasswordIsActive] = useState(true);
@@ -24,8 +22,8 @@ const  FormRegisterUser = () => {
     },[passwordIsActive]) */
     const fetchToken  = (userName, password) => {
       const data = {
-        "username":userName ,
-        'password':password 
+        "username":userName.value ,
+        'password':password.value 
       };                 
       return axios.post(`${process.env.WP_URL_REST}/jwt-auth/v1/token`, JSON.stringify(data),{headers: {
         'Content-Type': 'application/json',}
@@ -40,7 +38,9 @@ const  FormRegisterUser = () => {
       };   
       return axios.post(`${process.env.WP_URL_REST}`+"/apischool/v1/students", JSON.stringify(data),{headers: {
         'Content-Type': 'application/json',}
-        }).then((response)=>{ return response}).catch(({response})=>{return response});              
+        })
+        .then((response)=> response)
+        .catch(({response})=>{return response});              
     }
 
     const checkTokken= (fetchLogin)=>{
@@ -49,37 +49,33 @@ const  FormRegisterUser = () => {
           // console.log("Loggin exitoso"); 
           setLogin({token:fetchLogin.data.token, username:fetchLogin.data.user_display_name, user_email:fetchLogin.data.user_email})
           break;
-        case 403:
-          const errorMessage = fetchLogin.data.message;
-          // console.log("Error");       
-          const message = errorMessage.slice(0, errorMessage.indexOf('<a'))
-          setMessageLoggin(`${message} <a href="/lostPassword">¿Has olvidado tu contraseña?</a>`)
-            break;      
+        
         default:
           console.log("Error comuniquese con el equipo de desarrollo");
           break;
       }
     }
-
     const handleSubmit = async (e) =>{        
-        e.preventDefault()
-      if( userName.length < 1  || userEmail.length <1 || password.length <1) return console.log("Campo vacio"); 
-          const userCreated = await createUser(userName, userEmail, password);
+      e.preventDefault()
+      userName.value.length < 1 && setUserName({...userName, error:true, message:"Ingrese este campo"})
+      userEmail.value.length < 1 && setUserEmail({...userEmail, error:true, message:"Ingrese este campo"})
+      password.value.length < 1 && setPassword({...password, error:true, message:"Ingrese este campo"})
+      if(  userName.value.length < 1 || userEmail.value.length <1 || password.value.length <1) return console.log("Campo vacio"); 
+      const userCreated = await createUser(userName.value, userEmail.value, password.value);
           // console.log(userCreated);
+      console.log(userCreated);
       if (userCreated.data.success){
             const username = userName;
             const pass_user = password;
-            const fetchLogin = await fetchToken(username, pass_user)
-            checkTokken(fetchLogin)
-            if (typeof window !== `undefined`){ 
-               
-              window.location = '/';
+            // const fetchLogin = await fetchToken(username, pass_user)
+            // checkTokken(fetchLogin)
+            if (typeof window !== `undefined`){                
+              window.location = '/login';
             }
-            setMessageLoggin(null)
       }else{
-        const errorMessage = userCreated.data.message;
-        const message = errorMessage.slice(0, errorMessage.indexOf('<a'))
-        setMessageLoggin(`${message} <a href="/lostPassword">¿Has olvidado tu contraseña?</a>`)
+        // console.log(userCreated.data.message);
+          if(userCreated.data.message.search("User") !== -1) return setUserName({...userName,error:true, message:[userCreated.data.message] })
+          if(userCreated.data.message.search("Email") !== -1) return setUserEmail({...userEmail,error:true, message:[userCreated.data.message] })
         }       
       }
       const handlePassword=()=>{
@@ -100,17 +96,23 @@ const  FormRegisterUser = () => {
       <form className="form" onSubmit={(e)=>{handleSubmit(e)}} >
           <div className='form__block'>
             <label htmlFor="userName" >Usuario</label>
-            <input type="text"  onChange={(e)=>setUserName(e.target.value)} id="userName" value={userName} placeholder='Ingrese su cuenta' />
+            <input type="text"  onChange={(e)=>setUserName({...userName, value:e.target.value, error:false})} id="userName" value={userName.value} placeholder='Ingrese su cuenta' />
+            {
+                          userName.error && <p>{userName.message}</p>
+            }
           </div>
 
           <div className="form__block">
           <label htmlFor="password" >Correo</label>   
-            <input type="text"  onChange={(e)=>setUserEmail(e.target.value)} value={userEmail} placeholder='Ingrese su cuenta' />
+            <input type="text"  onChange={(e)=>setUserEmail({...userEmail, value:e.target.value, error:false})} value={userEmail.value} placeholder='Ingrese su cuenta' />
+            {
+                          userEmail.error && <p>{userEmail.message}</p>
+            }
           </div>  
 
           <div className='form__block'>
             <label htmlFor="password" >Contraseña</label>            
-            <input ref={stateRefPassword} onChange={(e)=>setPassword(e.target.value)} id="password" value={password} type={passwordIsActive ? "password":"text"}  />
+            <input ref={stateRefPassword} onChange={(e)=>setPassword({...password, value:e.target.value,error:false})} id="password" value={password.value} type={passwordIsActive ? "password":"text"}  />
             <div onClick={handlePassword} >
             
               <StaticImage className="password--hiden btn" src="../../static/svg/eye.svg" alt="A dinosaur" placeholder="blurred" layout="fixed" />            
